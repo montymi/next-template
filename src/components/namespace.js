@@ -1,12 +1,12 @@
-import { loadJson } from 'json.macro';
 import { I18nProvider, useI18n } from 'next-localization';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
 export default function Namespace() {
     const router = useRouter();
-    const translations = useMemo(() => {
-        return loadJson(`../locales/${router.locale}/namespace.json`);
+    const translations = useMemo(async () => {
+        const nsModule = await import(`../../public/locales/${router.locale}/namespace.json`);
+        return nsModule.default || {};
     }, [router.locale]);
 
     return (

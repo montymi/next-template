@@ -2,7 +2,7 @@ import { useI18n } from 'next-localization';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import Title from '../../components/title';
+import Title from '@/components/title';
 
 const PostPage = () => {
     const router = useRouter();
@@ -31,7 +31,7 @@ const PostPage = () => {
 };
 
 export async function getStaticProps({ locale }) {
-    const { default: lngDict = {} } = await import(`../../locales/${locale}/common.json`);
+    const { default: lngDict = {} } = await import(`../../../public/locales/${locale}/common.json`);
 
     return {
         props: { lngDict }
