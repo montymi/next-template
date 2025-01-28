@@ -4,12 +4,12 @@ import { useRouter } from 'next/router';
 import { ThemeProvider } from 'next-themes';
 import Head from 'next/head';
 
-interface MyAppPageProps {
-    lngDict: Record<string, any>;
-    [key: string]: any;
+interface AppPageProps {
+    lngDict: Record<string, unknown>;
+    [key: string]: unknown;
 }
 
-export default function MyApp({ Component, pageProps }: AppProps<MyAppPageProps>) {
+export default function MyApp({ Component, pageProps }: AppProps<AppPageProps>) {
     const router = useRouter();
     const { lngDict, ...rest } = pageProps;
 
