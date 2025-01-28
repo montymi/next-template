@@ -43,7 +43,7 @@ next-env.d.ts
 # service worker
 sw.js 
 sw.js.map
-workbox-.js 
-worker-.js 
-workbox-.js.map
-worker-.js.map
+workbox-*.js 
+worker-*.js 
+workbox-*.js.map
+worker-*.js.map
