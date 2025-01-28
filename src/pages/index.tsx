@@ -1,11 +1,26 @@
-import React from 'react';
+import Link from 'next/link';
 
-const Home: React.FC = () => {
+const HomePage = () => {
     return (
         <div>
-            <h1>Welcome to Next.js!</h1>
+            <h1>next-localization</h1>
+            <div>
+                <Link href="/dashboard">
+                    Go to CSR example (/dashboard)
+                </Link>
+            </div>
+            <div>
+                <Link href="/foo">
+                    Go to SSG example (/foo)
+                </Link>
+            </div>
+            <div>
+                <Link href="/namespace">
+                    Go to code-splitting example (/namespace)
+                </Link>
+            </div>
         </div>
     );
 };
 
-export default Home;
+export default HomePage;
