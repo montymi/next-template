@@ -1,4 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx prettier --write . && git add .
+if [ "$PRETTIER_MODE" = "write" ]; then
+    npx prettier --write . && git add .
+else
+    npx prettier --check .
+fi
