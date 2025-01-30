@@ -9,17 +9,11 @@ const withPWA = require('next-pwa')({
 
 // next.js config
 const nextConfig: NextConfig = {
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-  },
   reactStrictMode: false,
+  i18n: {
+      locales: ['en', 'de'],
+      defaultLocale: 'en',
+  },
 };
 
 module.exports = withPWA(nextConfig);
