@@ -2,7 +2,7 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 if [ "$PRETTIER_MODE" = "write" ]; then
-    npx prettier --write . && git add .
+    npx prettier --write src && npx eslint src --fix && git add src
 else
-    npx prettier --check .
+    npx prettier --check src
 fi

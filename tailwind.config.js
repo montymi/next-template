@@ -1,3 +1,5 @@
 export const content = ['./src/**/*.{js,ts,jsx,tsx}']
 export const darkMode = 'class'
-export const plugins = [require('tailwindcss-safe-area')]
+import tailwindcssSafeArea from 'tailwindcss-safe-area'
+
+export const plugins = [tailwindcssSafeArea]
