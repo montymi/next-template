@@ -9,7 +9,7 @@
 		"lint": "next lint",
 		"format": "prettier --write .",
 		"prepare": "husky install",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Currently a testless system...whoops!\""
 	},
 	"dependencies": {
 		"@tailwindcss/aspect-ratio": "^0.4.2",
