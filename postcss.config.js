@@ -1,5 +1,5 @@
 export const plugins = {
-    'tailwindcss/nesting': {},
-    tailwindcss: {},
-    autoprefixer: {},
-};
+	'tailwindcss/nesting': {},
+	tailwindcss: {},
+	autoprefixer: {},
+}
