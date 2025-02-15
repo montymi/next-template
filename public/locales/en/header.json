@@ -1,0 +1,14 @@
+{
+	"title": "Welcome to My Website",
+	"navigation": {
+		"home": "Home",
+		"about": "About",
+		"services": "Services",
+		"profile": "Profile"
+	},
+	"language": {
+		"english": "English",
+		"spanish": "Spanish",
+		"french": "French"
+	}
+}
