@@ -14,7 +14,6 @@ const generateLocaleMap = () => {
 		return fs.statSync(itemPath).isDirectory()
 	})
 	fs.writeFileSync(targetFile, JSON.stringify(folders, null, 2))
-	console.log('locales.json created.')
 }
 
 generateLocaleMap()
