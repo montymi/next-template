@@ -16,7 +16,6 @@ const useNamespace = (ns: string): NamespaceProps => {
 	useEffect(() => {
 		const loadTranslations = async () => {
 			const nsModule = await import(`../../public/locales/${lang}/${ns}.json`)
-			console.log(nsModule.default)
 			setTranslations(nsModule.default || {})
 		}
 		loadTranslations()
