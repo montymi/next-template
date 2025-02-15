@@ -1,12 +1,30 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* Custom global styles can be added here */
 body {
-	@apply min-h-screen select-none bg-zinc-900 text-zinc-50 antialiased p-safe dark:bg-zinc-900 dark:text-zinc-50;
+	font-family: sans-serif, 'Inter', 'Helvetica Neue', Arial;
+}
+:root {
+	--color-primary-text-light: #1a202c;
+	--color-secondary-text-light: #718096;
+	--color-warning-text-light: #e53e3e;
+	--color-primary-bg-light: #ffffff;
+	--color-secondary-bg-light: #edf2f7;
+	--color-warning-bg-light: #fefcbf;
 
-	/* PWA enhancements */
-	-webkit-overflow-scrolling: touch;
-	-webkit-tap-highlight-color: transparent;
-	-webkit-touch-callout: none;
+	--color-primary-text-dark: #f7fafc;
+	--color-secondary-text-dark: #a0aec0;
+	--color-warning-text-dark: #feb2b2;
+	--color-primary-bg-dark: #2d3748;
+	--color-secondary-bg-dark: #4a5568;
+	--color-warning-bg-dark: #9b2c2c;
+
+	--color-action-text-light: #2b6cb0;
+	--color-action-bg-light: #bee3f8;
+	--color-action-hover-light: #f7fafc;
+	--color-action-text-dark: #63b3ed;
+	--color-action-bg-dark: #2c5282;
+	--color-action-hover-dark: #374151;
 }

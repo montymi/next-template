@@ -1,17 +1,51 @@
 {
-	"intro": {
-		"welcome": "Willkommen, {{username}}!",
-		"text": "Ich hoffe, du findest das nützlich.",
-		"description": "Das Beispiel zeigt, wie man die Sprache für SSG und SSG optimierte Seiten wechselt."
+	"profile": {
+		"name": "Michael Montanaro",
+		"contact": {
+			"email": "mcmontanaro01@gmail.com",
+			"phone": "",
+			"address": {}
+		},
+		"biography": "Michael Montanaro ist ein Softwareentwickler mit einer Leidenschaft für die Erstellung innovativer Lösungen. Er arbeitet gerne an herausfordernden Projekten und lernt kontinuierlich neue Technologien."
 	},
-	"dashboard": {
-		"description": "Das Beispiel zeigt, wie man die Sprache nur Frontendseitig verändert. Nützlich für Dashboards wo SEO nicht relevant ist."
+	"about": {
+		"companyName": "Next Template Solutions",
+		"description": "Wir sind spezialisiert auf die Erstellung hochwertiger Webanwendungsvorlagen mit Next.js",
+		"mission": "Unsere Mission ist es, Entwicklern zu helfen, bessere Websites schneller zu erstellen",
+		"established": "2023",
+		"services": ["Webentwicklung", "Vorlagendesign", "Technische Beratung"]
 	},
-	"warning": "WARNING: {{birds}}",
+	"services": {
+		"title": "Unsere Dienstleistungen",
+		"description": "Hier sind einige unserer angebotenen Dienstleistungen.",
+		"clients": "Unsere Kunden umfassen",
+		"contact": "Kontaktieren Sie uns für weitere Informationen"
+	},
+	"warning": "WARNUNG: {{birds}}",
 	"birds": {
 		"other": "Vögel",
 		"one": "Vogel",
 		"two": "zwei Vögel",
 		"few": "einige Vögel"
+	},
+	"welcome": "Willkommen! 👋",
+	"description": "Eine leistungsstarke Startervorlage mit allem, was Sie für eine moderne Webanwendung benötigen",
+	"features": {
+		"internationalization": {
+			"title": "Internationalisierung",
+			"description": "Integrierte Unterstützung für mehrere Sprachen mit next-localization"
+		},
+		"themeControl": {
+			"title": "Themensteuerung",
+			"description": "Hell-/Dunkelmodus mit anpassbaren Farbschemata"
+		},
+		"pwaReady": {
+			"title": "PWA Bereit",
+			"description": "Progressive Web App-Unterstützung für Offline-Funktionalität"
+		},
+		"ssrSsg": {
+			"title": "SSR & SSG",
+			"description": "Server-seitiges Rendering und statische Seitengenerierung"
+		}
 	}
 }

@@ -1,5 +1,6 @@
-export const plugins = {
-	'tailwindcss/nesting': {},
-	tailwindcss: {},
-	autoprefixer: {},
+export default {
+	plugins: {
+		tailwindcss: {},
+		autoprefixer: {},
+	},
 }

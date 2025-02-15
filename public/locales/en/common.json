@@ -1,11 +1,25 @@
 {
-	"intro": {
-		"welcome": "Welcome, {{username}}!",
-		"text": "I hope you find this useful.",
-		"description": "This example demonstrate how to change the language for SSG and SSR optimized pages."
+	"profile": {
+		"name": "Michael Montanaro",
+		"contact": {
+			"email": "mcmontanaro01@gmail.com",
+			"phone": "",
+			"address": {}
+		},
+		"biography": "Michael Montanaro is a software developer with a passion for creating innovative solutions. He enjoys working on challenging projects and continuously learning new technologies."
 	},
-	"dashboard": {
-		"description": "This example demonstrate how to lazy-load the language on the client side."
+	"about": {
+		"companyName": "Next Template Solutions",
+		"description": "We specialize in creating high-quality web application templates using Next.js",
+		"mission": "Our mission is to help developers build better websites faster",
+		"established": "2023",
+		"services": ["Web Development", "Template Design", "Technical Consulting"]
+	},
+	"services": {
+		"title": "Our Services",
+		"description": "Here are some featured services that we offer.",
+		"clients": "Our clients include",
+		"contact": "Contact us for more information"
 	},
 	"warning": "WARNING: {{birds}}",
 	"birds": {
@@ -13,5 +27,25 @@
 		"one": "bird",
 		"two": "two birds",
 		"few": "some birds"
+	},
+	"welcome": "Welcome! 👋",
+	"description": "A powerful starter template with everything you need for a modern web application",
+	"features": {
+		"internationalization": {
+			"title": "Internationalization",
+			"description": "Built-in support for multiple languages using next-localization"
+		},
+		"themeControl": {
+			"title": "Theme Control",
+			"description": "Light/Dark mode with customizable color schemes"
+		},
+		"pwaReady": {
+			"title": "PWA Ready",
+			"description": "Progressive Web App support for offline functionality"
+		},
+		"ssrSsg": {
+			"title": "SSR & SSG",
+			"description": "Server-side rendering and static site generation"
+		}
 	}
 }
