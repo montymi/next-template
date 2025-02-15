@@ -1,0 +1,9 @@
+{
+	"title": "Bienvenue sur mon site web",
+	"navigation": {
+		"home": "Accueil",
+		"about": "À propos",
+		"services": "Services",
+		"profile": "Profil"
+	}
+}

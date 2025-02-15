@@ -1,0 +1,51 @@
+{
+	"profile": {
+		"name": "Michael Montanaro",
+		"contact": {
+			"email": "mcmontanaro01@gmail.com",
+			"phone": "",
+			"address": {}
+		},
+		"biography": "Michael Montanaro è uno sviluppatore di software con una passione per creare soluzioni innovative. Gli piace lavorare su progetti sfidanti e imparare continuamente nuove tecnologie."
+	},
+	"about": {
+		"companyName": "Next Template Solutions",
+		"description": "Siamo specializzati nella creazione di modelli di applicazioni web di alta qualità utilizzando Next.js",
+		"mission": "La nostra missione è aiutare gli sviluppatori a costruire siti web migliori più velocemente",
+		"established": "2023",
+		"services": ["Sviluppo Web", "Design di Modelli", "Consulenza Tecnica"]
+	},
+	"services": {
+		"title": "I Nostri Servizi",
+		"description": "Ecco alcuni dei servizi principali che offriamo.",
+		"clients": "I nostri clienti includono",
+		"contact": "Contattaci per ulteriori informazioni"
+	},
+	"warning": "ATTENZIONE: {{birds}}",
+	"birds": {
+		"other": "uccelli",
+		"one": "uccello",
+		"two": "due uccelli",
+		"few": "alcuni uccelli"
+	},
+	"welcome": "Benvenuto! 👋",
+	"description": "Un potente modello di partenza con tutto ciò che serve per un'applicazione web moderna",
+	"features": {
+		"internationalization": {
+			"title": "Internazionalizzazione",
+			"description": "Supporto integrato per più lingue usando next-localization"
+		},
+		"themeControl": {
+			"title": "Controllo del Tema",
+			"description": "Modalità Chiara/Scura con schemi di colori personalizzabili"
+		},
+		"pwaReady": {
+			"title": "PWA Pronto",
+			"description": "Supporto per le Progressive Web Apps per funzionalità offline"
+		},
+		"ssrSsg": {
+			"title": "SSR & SSG",
+			"description": "Rendering lato server e generazione di siti statici"
+		}
+	}
+}
