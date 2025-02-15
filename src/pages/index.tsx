@@ -77,7 +77,7 @@ const HomePage = () => {
 			</motion.h2>
 
 			<motion.p
-				className='text-xl mb-12 text-center max-w-2xl'
+				className='text-xl mb-12 text-center max-w-2xl text-secondary-text dark:text-secondary-text-dark'
 				initial={{ opacity: 0, y: 20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ delay: 0.5 }}
@@ -94,7 +94,7 @@ const HomePage = () => {
 				{features.map((feature, index) => (
 					<motion.div
 						key={index}
-						className='feature-card p-8 rounded-xl shadow-lg backdrop-blur-sm bg-white/10 border border-white/20'
+						className='feature-card p-8 rounded-xl shadow-lg backdrop-blur-sm bg-secondary-bg dark:bg-secondary-bg-dark border border-secondary-bg dark:border-secondary-bg-dark'
 						variants={item}
 						whileHover={{
 							scale: 1.05,
@@ -110,8 +110,10 @@ const HomePage = () => {
 						>
 							{feature.icon}
 						</motion.span>
-						<h2 className='text-2xl font-semibold mb-3'>{feature.title}</h2>
-						<p className='text-gray-600 dark:text-gray-300'>
+						<h2 className='text-2xl font-semibold mb-3 text-primary-text dark:text-primary-text-dark'>
+							{feature.title}
+						</h2>
+						<p className='text-secondary-text dark:text-secondary-text-dark'>
 							{feature.description}
 						</p>
 					</motion.div>
