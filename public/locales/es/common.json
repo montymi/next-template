@@ -1,0 +1,55 @@
+{
+	"profile": {
+		"name": "Michael Montanaro",
+		"contact": {
+			"email": "mcmontanaro01@gmail.com",
+			"phone": "",
+			"address": {}
+		},
+		"biography": "Michael Montanaro es un desarrollador de software con pasión por crear soluciones innovadoras. Disfruta trabajar en proyectos desafiantes y aprender nuevas tecnologías de forma continua."
+	},
+	"about": {
+		"companyName": "Next Template Solutions",
+		"description": "Nos especializamos en crear plantillas de aplicaciones web de alta calidad usando Next.js",
+		"mission": "Nuestra misión es ayudar a los desarrolladores a construir mejores sitios web más rápido",
+		"established": "2023",
+		"services": [
+			"Desarrollo Web",
+			"Diseño de Plantillas",
+			"Consultoría Técnica"
+		]
+	},
+	"services": {
+		"title": "Nuestros Servicios",
+		"description": "Aquí algunos de los servicios destacados que ofrecemos.",
+		"clients": "Nuestros clientes incluyen",
+		"contact": "Contáctenos para más información"
+	},
+	"warning": "ADVERTENCIA: {{birds}}",
+	"birds": {
+		"other": "pájaros",
+		"one": "pájaro",
+		"two": "dos pájaros",
+		"few": "algunos pájaros"
+	},
+	"welcome": "¡Bienvenido! 👋",
+	"description": "Una plantilla de inicio poderosa con todo lo necesario para una aplicación web moderna",
+	"features": {
+		"internationalization": {
+			"title": "Internacionalización",
+			"description": "Soporte incorporado para múltiples idiomas usando next-localization"
+		},
+		"themeControl": {
+			"title": "Control de Tema",
+			"description": "Modo Claro/Oscuro con esquemas de color personalizables"
+		},
+		"pwaReady": {
+			"title": "PWA Listo",
+			"description": "Soporte para Aplicaciones Web Progresivas para funcionalidad sin conexión"
+		},
+		"ssrSsg": {
+			"title": "SSR & SSG",
+			"description": "Renderizado del lado del servidor y generación de sitios estáticos"
+		}
+	}
+}

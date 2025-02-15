@@ -3,8 +3,10 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import React from 'react'
 import useNamespace from '@/hooks/useNamespace'
-// filepath: /components/ThemeToggle.tsx
 import { useEffect, useState } from 'react'
+import { flagMapping } from '@/styles/mappings'
+
+const navigation = ['home', 'about', 'services']
 
 interface LangProps {
 	lang: string
@@ -48,30 +50,30 @@ import {
 function Logo() {
 	return (
 		<Link href='/profile'>
-			<UserCircleIcon className='h-7 w-7 bg-secondary-bg dark:bg-secondary-bg-dark hover:cursor-pointer' />
+			<UserCircleIcon className='h-10 w-10 text-secondary-text dark:text-secondary-text-dark hover:cursor-pointer hover:bg-action-hover dark:hover:bg-action-hover-dark rounded ' />
 		</Link>
 	)
 }
 
 function Navigation({ t }: TranslationProps) {
+	// Get all navigation items from translations
+	const navigationItems = navigation.filter(
+		(key) => typeof t(`navigation.${key}`) === 'string',
+	)
+
 	return (
 		<nav>
 			<ul className='flex space-x-4'>
-				<li>
-					<Link href='/' className=''>
-						{t('navigation.home')}
-					</Link>
-				</li>
-				<li>
-					<Link href='/about' className=''>
-						{t('navigation.about')}
-					</Link>
-				</li>
-				<li>
-					<Link href='/services' className=''>
-						{t('navigation.services')}
-					</Link>
-				</li>
+				{navigationItems.map((item) => (
+					<li
+						key={item}
+						className='hover:bg-action-hover dark:hover:bg-action-hover-dark px-2 py-1 rounded'
+					>
+						<Link href={`/${item === 'home' ? '' : item}`}>
+							{t(`navigation.${item}`)}
+						</Link>
+					</li>
+				))}
 			</ul>
 		</nav>
 	)
@@ -83,7 +85,7 @@ export function Notice({ t }: TranslationProps) {
 
 	return (
 		<div
-			className='bg-warning-bg dark:bg-warning-bg-dark text-warning-text dark:text-warning-text-dark text-center h-4 flex items-center justify-center relative cursor-pointer p-4'
+			className='bg-warning-bg dark:bg-warning-bg-dark text-warning-text dark:text-warning-text-dark text-center h-4 flex items-center justify-center relative cursor-pointer p-4 hover:bg-action-bg dark:hover:bg-action-bg-dark'
 			onClick={(e) => {
 				const parent = e.currentTarget
 				if (parent) {
@@ -101,8 +103,9 @@ interface UtilsProps extends LangProps {
 	onLanguageChange: (lang: string) => void
 }
 
+import locales from '@/locales.json'
+
 export function Utils({ lang, onLanguageChange }: UtilsProps) {
-	const router = useRouter()
 	const [mounted, setMounted] = useState(false)
 	const [isOpen, setIsOpen] = useState(false)
 	const dropdownRef = React.useRef<HTMLDivElement>(null)
@@ -130,25 +133,21 @@ export function Utils({ lang, onLanguageChange }: UtilsProps) {
 				className='flex items-center space-x-2 p-2 rounded-md hover:bg-action-hover dark:hover:bg-action-hover-dark'
 			>
 				<LanguageIcon className='h-5 w-5' />
-				<span>{lang.toUpperCase()}</span>
+				<span>{flagMapping[lang]}</span>
 			</button>
 
 			{isOpen && (
-				<div className='absolute right-0 mt-2 py-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg'>
-					{router.locales?.map((locale) => (
+				<div className='absolute right-0 mt-2 py-2 bg-white dark:bg-gray-800 rounded-md shadow-lg'>
+					{locales.map((locale: string) => (
 						<button
 							key={locale}
 							onClick={() => {
 								onLanguageChange(locale)
 								setIsOpen(false)
 							}}
-							className='block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700'
+							className='block text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700'
 						>
-							{locale === 'en'
-								? 'English'
-								: locale === 'de'
-									? 'Deutsch'
-									: locale.toUpperCase()}
+							<span className='mr-2'>{flagMapping[locale]}</span>
 						</button>
 					))}
 				</div>

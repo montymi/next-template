@@ -47,3 +47,6 @@ workbox-*.js
 worker-*.js 
 workbox-*.js.map
 worker-*.js.map
+
+# locales
+locales.json
