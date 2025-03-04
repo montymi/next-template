@@ -8,13 +8,13 @@ const mockTranslations = {
 	'services.description': 'Service Description',
 	'services.clients': 'Our Clients',
 	'services.contact': 'Contact Us',
-}
+} as const;
 
 // Mock the useNamespace hook
 jest.mock('@/src/hooks/useNamespace', () => ({
 	__esModule: true,
 	default: () => ({
-		t: (key: string) => mockTranslations[key] || key,
+		t: (key: keyof typeof mockTranslations) => mockTranslations[key] || key,
 		lang: 'en',
 	}),
 }))
