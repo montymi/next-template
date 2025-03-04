@@ -1,15 +1,15 @@
 {
 	"profile": {
-		"name": "Michael Montanaro",
+		"name": "John Doe",
 		"contact": {
-			"email": "mcmontanaro01@gmail.com",
+			"email": "example@email.com",
 			"phone": "",
 			"address": {}
 		},
-		"biography": "Michael Montanaro ist ein Softwareentwickler mit einer Leidenschaft für die Erstellung innovativer Lösungen. Er arbeitet gerne an herausfordernden Projekten und lernt kontinuierlich neue Technologien."
+		"biography": "Ein erfahrener Softwareentwickler mit einer Leidenschaft für die Erstellung innovativer Lösungen. Er arbeitet gerne an herausfordernden Projekten und lernt kontinuierlich neue Technologien."
 	},
 	"about": {
-		"companyName": "Next Template Solutions",
+		"companyName": "Example Solutions",
 		"description": "Wir sind spezialisiert auf die Erstellung hochwertiger Webanwendungsvorlagen mit Next.js",
 		"mission": "Unsere Mission ist es, Entwicklern zu helfen, bessere Websites schneller zu erstellen",
 		"established": "2023",
