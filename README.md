@@ -6,7 +6,7 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![GPL License][license-shield]][license-url]
+[![License][license-shield]][license-url]
 
 <!-- PROJECT HEADER -->
 # 📑 next-template
@@ -261,7 +261,7 @@ See the [open issues][bug-url] for a full list of issues and proposed features.
 <!-- LICENSE -->
 ## License
 
-Distributed under the GPL-3.0 License. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <br />
 
