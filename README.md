@@ -329,7 +329,7 @@ Michael Montanaro
 [issues-shield]: https://img.shields.io/github/issues/montymi/next-template.svg?style=for-the-badge
 [issues-url]: https://github.com/montymi/next-template/issues
 [license-shield]: https://img.shields.io/github/license/montymi/next-template.svg?style=for-the-badge
-[license-url]: https://github.com/montymi/next-template/blob/master/LICENSE.txt
+[license-url]: https://github.com/montymi/next-template/blob/main/LICENSE.txt
 [next-shield]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [next-url]: https://nextjs.org/
 [ts-shield]: https://img.shields.io/badge/Typescript-black?style=for-the-badge&logo=typescript&logoColor=natural
