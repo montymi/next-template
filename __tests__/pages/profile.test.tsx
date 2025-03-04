@@ -10,7 +10,7 @@ import { I18nProvider } from 'next-localization'
 
 // Mock translations
 const mockTranslations = {
-	'profile.name': 'Michael Montanaro',
+	'profile.name': 'John Doe',
 }
 
 // Mock framer-motion

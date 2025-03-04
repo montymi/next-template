@@ -1,15 +1,15 @@
 {
 	"profile": {
-		"name": "Michael Montanaro",
+		"name": "John Doe",
 		"contact": {
-			"email": "mcmontanaro01@gmail.com",
+			"email": "contact@example.com",
 			"phone": "",
 			"address": {}
 		},
-		"biography": "Michael Montanaro es un desarrollador de software con pasión por crear soluciones innovadoras. Disfruta trabajar en proyectos desafiantes y aprender nuevas tecnologías de forma continua."
+		"biography": "Un desarrollador de software con pasión por crear soluciones innovadoras. Disfruta trabajar en proyectos desafiantes y aprender nuevas tecnologías de forma continua."
 	},
 	"about": {
-		"companyName": "Next Template Solutions",
+		"companyName": "Example Company",
 		"description": "Nos especializamos en crear plantillas de aplicaciones web de alta calidad usando Next.js",
 		"mission": "Nuestra misión es ayudar a los desarrolladores a construir mejores sitios web más rápido",
 		"established": "2023",

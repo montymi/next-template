@@ -32,7 +32,7 @@ jest.mock('next/router', () => ({
 }))
 
 // Mock translations based on common.json
-const mockTranslations = {
+const mockTranslations: { [key: string]: any } = {
 	'about.companyName': 'Next Template Solutions',
 	'about.description':
 		'We specialize in creating high-quality web application templates using Next.js',
@@ -88,9 +88,16 @@ describe('About Page', () => {
 	})
 
 	it('renders all service cards from translations', () => {
-		mockTranslations['about.services'].forEach((service) => {
-			expect(screen.getByText(service.title)).toBeInTheDocument()
-		})
+		// Define interface for service structure
+		interface Service {
+			title: string
+		}
+
+		;(mockTranslations['about.services'] as Service[]).forEach(
+			(service: Service) => {
+				expect(screen.getByText(service.title)).toBeInTheDocument()
+			},
+		)
 	})
 
 	it('applies correct styling to main container', () => {
