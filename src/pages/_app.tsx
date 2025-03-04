@@ -5,7 +5,6 @@ import { ThemeProvider } from 'next-themes'
 import Head from 'next/head'
 import '@/styles/globals.css'
 import Header from '@/components/Header'
-import { useEffect, useState } from 'react'
 import Footer from '@/components/Footer'
 
 interface AppPageProps {

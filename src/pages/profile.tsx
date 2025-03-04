@@ -12,7 +12,7 @@ export default function Profile() {
 			transition={{ duration: 0.5 }}
 			className='flex flex-col items-center justify-center flex-grow p-4 m-10 text-primary-text dark:text-primary-text-dark max-w-2xl mx-auto'
 		>
-			<Title username='montymi' />
+			<Title>montymi</Title>
 			<h2 className='text-2xl font-bold mb-4'>{t('profile.name')}</h2>
 			<h3 className='text-xl font-semibold mb-4'>
 				{t('profile.contact.email')}
