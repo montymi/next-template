@@ -16,6 +16,7 @@ export default function Services() {
 							key={key}
 							whileHover={{ scale: 1.05 }}
 							className='bg-primary-bg dark:bg-primary-bg-dark p-6 shadow rounded'
+							data-testid='service-card'
 						>
 							<p className='text-primary dark:text-primary-dark'>
 								{t(`services.${key}`)}

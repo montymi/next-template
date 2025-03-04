@@ -16,9 +16,9 @@ const Footer: React.FC = () => {
 					className='p-2 bg-action-bg dark:bg-action-bg-dark rounded hover:bg-action-hover dark:hover:bg-action-hover-dark hover:cursor-pointer'
 				>
 					{theme === 'light' ? (
-						<SunIcon className='h-5 w-5' />
+						<SunIcon className='h-5 w-5' data-testid='sun-icon' />
 					) : (
-						<MoonIcon className='h-5 w-5' />
+						<MoonIcon className='h-5 w-5' data-testid='moon-icon' />
 					)}
 				</button>
 			</div>
