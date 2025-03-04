@@ -1,6 +1,7 @@
 <div id="readme-top"></div>
 
 <!-- PROJECT SHIELDS -->
+
 [![Creator][creator-shield]][creator-url]
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
@@ -9,11 +10,13 @@
 [![License][license-shield]][license-url]
 
 <!-- PROJECT HEADER -->
+
 # 📑 next-template
 
 > Production-ready Next.js starter with TypeScript, Tailwind, and i18n support. PWA-enabled for modern web development.
 
 <!-- CALL TO ACTIONS -->
+
 [![🚀 Explore Demo][demo-shield]][demo-url]
 [![🐛 Report Bug][bug-shield]][bug-url]
 [![✨ Request Feature][feature-shield]][feature-url]
@@ -51,6 +54,7 @@
 <br />
 
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 A modern, feature-rich Next.js template that provides everything you need to build production-ready web applications. Built with TypeScript and React, this template includes:
@@ -87,6 +91,7 @@ This template serves as a foundation for building modern web applications, incor
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
+
 ## Installation
 
 ### Prerequisites
@@ -160,6 +165,7 @@ npm run build
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- STRUCTURE -->
+
 ## Structure
 
 ```
@@ -205,33 +211,39 @@ next-template/
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- TASKS -->
+
 ## Tasks
 
 - [ ] **Testing**
+
   - [ ] Add unit tests for all components
   - [ ] Add integration tests for pages
   - [ ] Add end-to-end tests using Cypress or Playwright
   - [ ] Setup test coverage reporting
 
 - [ ] **Internationalization**
+
   - [ ] Add more language support
   - [ ] Implement RTL support for Arabic/Hebrew
   - [ ] Add language detection
   - [ ] Create translation contribution guide
 
 - [ ] **Documentation**
+
   - [ ] Add JSDoc comments to all components
   - [ ] Create Storybook documentation
   - [ ] Add API documentation
   - [ ] Create contributing guidelines
 
 - [ ] **Performance**
+
   - [ ] Implement image optimization
   - [ ] Add lazy loading for components
   - [ ] Optimize bundle size
   - [ ] Add performance monitoring
 
 - [ ] **Accessibility**
+
   - [ ] Add ARIA labels
   - [ ] Implement keyboard navigation
   - [ ] Add screen reader support
@@ -248,6 +260,7 @@ See the [open issues][bug-url] for a full list of issues and proposed features.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 1. [Fork the Project](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
@@ -259,6 +272,7 @@ See the [open issues][bug-url] for a full list of issues and proposed features.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See `LICENSE.txt` for more information.
@@ -266,6 +280,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <br />
 
 <!-- CONTACT -->
+
 ## Contact
 
 Michael Montanaro
@@ -285,19 +300,18 @@ Michael Montanaro
 <br />
 
 <!-- ACKNOWLEDGMENTS -->
+
 ## Acknowledgments
 
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
+- [Choose an Open Source License](https://choosealicense.com)
+- [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
+- [Font Awesome](https://fontawesome.com)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [demo-shield]: https://img.shields.io/badge/🚀%20Explore%20Demo-grey?style=for-the-badge
 [demo-url]: https://github.com/montymi/next-template
 [bug-shield]: https://img.shields.io/badge/🐛%20Report%20Bug-grey?style=for-the-badge
@@ -316,7 +330,6 @@ Michael Montanaro
 [issues-url]: https://github.com/montymi/next-template/issues
 [license-shield]: https://img.shields.io/github/license/montymi/next-template.svg?style=for-the-badge
 [license-url]: https://github.com/montymi/next-template/blob/master/LICENSE.txt
-
 [next-shield]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [next-url]: https://nextjs.org/
 [ts-shield]: https://img.shields.io/badge/Typescript-black?style=for-the-badge&logo=typescript&logoColor=natural
