@@ -3,8 +3,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
-import Title from '../components/title'
-
 const Dashboard = () => {
 	const router = useRouter()
 	const i18n = useI18n()
@@ -25,7 +23,6 @@ const Dashboard = () => {
 
 	return (
 		<div>
-			<Title username='Peter' />
 			<h2>{i18n.t('intro.text')}</h2>
 			<h3>{i18n.t('dashboard.description')}</h3>
 			<div>Current locale: {router.locale}</div>
