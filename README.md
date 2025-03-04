@@ -31,17 +31,8 @@
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
-    <li><a href="#installation">Installation</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#setup">Setup</a></li>
-      </ul></li>
-    <li><a href="#usage">Usage</a>
-      <ul>
-        <li><a href="#getting-started">Getting Started</a></li>
-        <li><a href="#advanced">Advanced</a></li>
-      </ul></li>
-    </li>
+    <li><a href="#installation">Installation</a></li>
+    <li><a href="#usage">Usage</a></li>
     <li><a href="#structure">Structure</a></li>
     <li><a href="#tasks">Tasks</a></li>
     <li><a href="#contributing">Contributing</a></li>
@@ -178,6 +169,8 @@ next-template/
 │   ├── images/            # Image assets
 │   ├── locales/           # Translation files
 │   └── manifest.json      # PWA manifest
+├── scripts/               # Build Scripts
+│   └── generate-locale-map.js
 ├── src/                   # Source code
 │   ├── components/        # React components
 │   │   ├── title.tsx
