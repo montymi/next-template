@@ -19,23 +19,6 @@ export default function MyApp({
 }: AppProps<AppPageProps>) {
 	const router = useRouter()
 	const { lngDict, ...rest } = pageProps
-	const [isDarkMode, setIsDarkMode] = useState(false)
-
-	useEffect(() => {
-		const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-		setIsDarkMode(darkModeMediaQuery.matches)
-		darkModeMediaQuery.addEventListener('change', (e) => {
-			setIsDarkMode(e.matches)
-		})
-	}, [])
-
-	useEffect(() => {
-		if (isDarkMode) {
-			document.documentElement.classList.add('dark')
-		} else {
-			document.documentElement.classList.remove('dark')
-		}
-	}, [isDarkMode])
 
 	return (
 		<ThemeProvider
