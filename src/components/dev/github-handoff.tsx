@@ -35,10 +35,12 @@ export function GitHubHandoff({
 	snapshot,
 	onSave,
 	onBusyChange,
+	preparing = false,
 }: {
 	snapshot: Snapshot
 	onSave: () => Promise<Snapshot>
 	onBusyChange: (busy: boolean) => void
+	preparing?: boolean
 }) {
 	const [auth, setAuth] = useState<Status | null>(null)
 	const [customName, setCustomName] = useState(() =>
@@ -102,7 +104,7 @@ export function GitHubHandoff({
 		}
 	}, [])
 	async function continueFlow() {
-		if (busy || checking || !validName) return
+		if (busy || preparing || checking || !validName) return
 		setBusy(true)
 		setNotice('Saving your latest configuration…')
 		try {
@@ -269,19 +271,27 @@ export function GitHubHandoff({
 					)}
 					<Button
 						className='handoff-primary'
-						disabled={busy || checking || !validName || (!auth && !checking)}
+						disabled={
+							busy ||
+							preparing ||
+							checking ||
+							!validName ||
+							(!auth && !checking)
+						}
 						onClick={() => void continueFlow()}
 					>
 						<GitHubIcon />
-						{busy
-							? 'Please wait…'
-							: checking
-								? 'Checking GitHub…'
-								: auth?.connected
-									? 'Create my fork'
-									: auth?.configured
-										? 'Continue with GitHub'
-										: 'Save configuration'}
+						{preparing
+							? 'Preparing image…'
+							: busy
+								? 'Please wait…'
+								: checking
+									? 'Checking GitHub…'
+									: auth?.connected
+										? 'Create my fork'
+										: auth?.configured
+											? 'Continue with GitHub'
+											: 'Save configuration'}
 						{auth?.connected && <ForkIcon />}
 					</Button>
 					{!auth && !checking && (

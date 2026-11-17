@@ -1,11 +1,12 @@
 'use client'
 import { GitHubHandoff } from './github-handoff'
+import { ArtworkInput } from './artwork-input'
 import { validateSnapshot, type Snapshot } from '@/lib/github/snapshot'
 import { readSaved, writeSaved } from '@/lib/github/saved'
 import { useEffect, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
-import { readArtwork, starterKit, downloadBytes } from '@/lib/starter-kit'
+import { starterKit, downloadBytes } from '@/lib/starter-kit'
 import site from '@/config/site.json'
 import brandSource from '@/config/brand.json'
 import { publishBrand } from '@/components/site/brand-preview'
@@ -104,6 +105,9 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 	const [status, setStatus] = useState('')
 	const [saving, setSaving] = useState(false)
 	const [flowBusy, setFlowBusy] = useState(false)
+	const [uploading, setUploading] = useState({ logo: false, avatar: false })
+	const [artworkReset, setArtworkReset] = useState(0)
+	const preparing = uploading.logo || uploading.avatar
 	const [brand, setBrand] = useState(
 		initialSaved?.brand ?? { ...brandSource, name: site.name },
 	)
@@ -132,19 +136,6 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 	}
 	const isDev = process.env.NODE_ENV === 'development'
 	useEffect(() => publishBrand(brand), [brand])
-	async function upload(file: File | undefined, key: 'logo' | 'avatar') {
-		if (!file) return
-		try {
-			setBrand((current) => ({ ...current, [key]: '' }))
-			const image = await readArtwork(file)
-			setBrand((current) => ({ ...current, [key]: image }))
-			setStatus('Artwork ready. Included in your starter kit.')
-		} catch (error) {
-			setStatus(
-				error instanceof Error ? error.message : 'Could not read image.',
-			)
-		}
-	}
 	async function exportKit() {
 		setSaving(true)
 		try {
@@ -191,6 +182,7 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 	function reset() {
 		setTokens(structuredClone(source))
 		setBrand({ ...brandSource, name: site.name })
+		setArtworkReset((current) => current + 1)
 		setResume('')
 		try {
 			localStorage.removeItem(storageKey)
@@ -279,12 +271,23 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 						<h2 id='config-title'>Make it yours.</h2>
 					</div>
 					<button
-						className='icon-button'
+						className='icon-button config-close'
 						type='button'
 						aria-label='Close configurator'
 						onClick={() => dialog.current?.close()}
 					>
-						×
+						<svg
+							aria-hidden='true'
+							width='18'
+							height='18'
+							viewBox='0 0 24 24'
+							fill='none'
+							stroke='currentColor'
+							strokeWidth='1.5'
+							strokeLinecap='round'
+						>
+							<path d='m6 6 12 12M18 6 6 18' />
+						</svg>
 					</button>
 				</header>
 				<fieldset
@@ -326,24 +329,23 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 								}
 							/>
 						</label>
-						{(['logo', 'avatar'] as const).map((key) => (
-							<label className='config-label' key={key}>
-								{key === 'logo' ? 'Logo image' : 'Avatar image'}
-								<input
-									type='file'
-									accept='image/png,image/jpeg,image/webp'
-									onChange={(e) => void upload(e.target.files?.[0], key)}
-								/>
-								<button
-									className='text-link'
-									type='button'
-									onClick={() =>
-										setBrand((current) => ({ ...current, [key]: '' }))
-									}
-								>
-									Remove {key}
-								</button>
-							</label>
+						{(['logo', 'avatar'] as const).map((kind) => (
+							<ArtworkInput
+								key={`${kind}-${artworkReset}`}
+								kind={kind}
+								value={brand[kind]}
+								onChange={(value) =>
+									setBrand((current) => ({ ...current, [kind]: value }))
+								}
+								onStatus={setStatus}
+								onPendingChange={(pending) =>
+									setUploading((current) =>
+										current[kind] === pending
+											? current
+											: { ...current, [kind]: pending },
+									)
+								}
+							/>
 						))}
 						<p className='form-hint'>
 							PNG, JPEG, WebP · up to 2 MB. Logo generates the favicon, Apple
@@ -520,12 +522,15 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 						<summary>Download or export</summary>
 						<div className='config-actions'>
 							{isDev && (
-								<Button disabled={saving} onClick={() => void save()}>
+								<Button
+									disabled={saving || preparing}
+									onClick={() => void save()}
+								>
 									Save tokens locally
 								</Button>
 							)}
 							<Button
-								disabled={saving}
+								disabled={saving || preparing}
 								variant='secondary'
 								onClick={() => void exportKit()}
 							>
@@ -545,6 +550,7 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 				</fieldset>
 				<GitHubHandoff
 					snapshot={snapshot}
+					preparing={preparing}
 					onSave={saveConfiguration}
 					onBusyChange={setFlowBusy}
 				/>

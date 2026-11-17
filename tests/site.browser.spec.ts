@@ -185,13 +185,13 @@ test('public starter kit carries identity, artwork, resume, and tokens into a fo
 		.getByRole('textbox', { name: 'Site name', exact: true })
 		.fill('Alex Rivera')
 	await page
-		.getByLabel('Logo image', { exact: false })
+		.getByLabel('Logo image', { exact: true })
 		.setInputFiles('public/pwa-192x192.png')
 	await expect(
 		page.getByRole('status').filter({ hasText: 'Artwork ready.' }),
 	).toBeVisible()
 	await page
-		.getByLabel('Avatar image', { exact: false })
+		.getByLabel('Avatar image', { exact: true })
 		.setInputFiles('public/apple-touch-icon.png')
 	await expect(page.locator('.brand-avatar')).toBeVisible()
 	await page
@@ -298,7 +298,7 @@ test.describe('Configured GitHub handoff', () => {
 			.getByRole('textbox', { name: 'Site name', exact: true })
 			.fill('Alex’s saved site')
 		await page
-			.getByLabel('Logo image', { exact: false })
+			.getByLabel('Logo image', { exact: true })
 			.setInputFiles('public/pwa-192x192.png')
 		await expect(page.locator('.brand-upload')).toBeVisible()
 		await page.getByLabel('Primary hex', { exact: true }).fill('#205A79')
@@ -387,4 +387,76 @@ test('missing GitHub app is explicit and never silently forks the original', asy
 			})
 		).status(),
 	).toBe(503)
+})
+
+test('artwork controls preview, preserve on error, remove cleanly, and accept the same file again', async ({
+	page,
+}) => {
+	const { readFile } = await import('node:fs/promises')
+	const image = {
+		name: 'Montanaro Archway by the Adriatic with a very long image filename.png',
+		mimeType: 'image/png',
+		buffer: await readFile('public/pwa-192x192.png'),
+	}
+	await page.goto('/')
+	await page.getByRole('button', { name: /Customize UI/ }).click()
+	await expect(
+		page.getByRole('button', { name: 'Remove logo', exact: true }),
+	).toHaveCount(0)
+	const chooserEvent = page.waitForEvent('filechooser')
+	await page
+		.getByRole('button', { name: 'Choose logo image', exact: true })
+		.click()
+	await (await chooserEvent).setFiles(image)
+	await expect(
+		page.getByRole('img', { name: 'Logo preview', exact: true }),
+	).toBeVisible()
+	await expect(page.locator('.artwork-filename').first()).toHaveText(image.name)
+	const original = await page
+		.getByRole('img', { name: 'Logo preview', exact: true })
+		.getAttribute('src')
+	await page.getByLabel('Logo image', { exact: true }).setInputFiles({
+		name: 'notes.txt',
+		mimeType: 'text/plain',
+		buffer: Buffer.from('This is not an image'),
+	})
+	await expect(page.getByRole('dialog').getByRole('alert')).toContainText(
+		'PNG, JPEG, or WebP',
+	)
+	await expect(
+		page.getByRole('img', { name: 'Logo preview', exact: true }),
+	).toHaveAttribute('src', original!)
+	let unexpectedPicker = false
+	page.on('filechooser', () => {
+		unexpectedPicker = true
+	})
+	await page.getByRole('button', { name: 'Remove logo', exact: true }).click()
+	await expect(
+		page.getByRole('img', { name: 'Logo preview', exact: true }),
+	).toHaveCount(0)
+	await expect(page.getByRole('dialog').getByRole('alert')).toHaveCount(0)
+	expect(unexpectedPicker).toBe(false)
+	await page.getByLabel('Logo image', { exact: true }).setInputFiles(image)
+	await expect(
+		page.getByRole('img', { name: 'Logo preview', exact: true }),
+	).toBeVisible()
+	await page.getByLabel('Avatar image', { exact: true }).setInputFiles(image)
+	await expect(
+		page.getByRole('img', { name: 'Avatar preview', exact: true }),
+	).toBeVisible()
+	expect(
+		await page
+			.locator('.artwork-control')
+			.first()
+			.evaluate((element) => element.scrollWidth <= element.clientWidth),
+	).toBe(true)
+	expect(
+		await page.evaluate(
+			() => document.documentElement.scrollWidth <= innerWidth,
+		),
+	).toBe(true)
+	await page
+		.getByRole('button', { name: 'Close configurator', exact: true })
+		.click()
+	await expect(page.getByRole('dialog')).not.toBeVisible()
 })
