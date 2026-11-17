@@ -15,7 +15,8 @@
 		"language": "Language",
 		"skip": "Skip to content",
 		"themeLight": "Switch to light theme",
-		"themeDark": "Switch to dark theme"
+		"themeDark": "Switch to dark theme",
+		"fork": "Fork on GitHub"
 	},
 	"Home": {
 		"eyebrow": "A CONSIDERED STARTER / NEXT.JS",
@@ -37,7 +38,9 @@
 		"ctaLabel": "02 / MAKE ROOM FOR YOUR IDEA",
 		"ctaTitle": "Your next chapter starts here.",
 		"ctaText": "Replace the name, choose your colors, and build the thing only you can build.",
-		"ctaAction": "Get started"
+		"ctaAction": "Get started",
+		"fork": "Fork on GitHub",
+		"forkNote": "Create a copy in your GitHub account. GitHub may ask you to sign in."
 	},
 	"System": {
 		"eyebrow": "THE DESIGN SYSTEM",

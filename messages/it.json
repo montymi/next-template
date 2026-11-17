@@ -15,7 +15,8 @@
 		"language": "Lingua",
 		"skip": "Vai al contenuto",
 		"themeLight": "Passa al tema chiaro",
-		"themeDark": "Passa al tema scuro"
+		"themeDark": "Passa al tema scuro",
+		"fork": "Crea un fork su GitHub"
 	},
 	"Home": {
 		"eyebrow": "UN PUNTO DI PARTENZA / NEXT.JS",
@@ -37,7 +38,9 @@
 		"ctaLabel": "02 / FAI SPAZIO ALLA TUA IDEA",
 		"ctaTitle": "Il prossimo capitolo inizia qui.",
 		"ctaText": "Cambia il nome, scegli i colori e costruisci ciò che solo tu puoi creare.",
-		"ctaAction": "Per iniziare"
+		"ctaAction": "Per iniziare",
+		"fork": "Crea un fork su GitHub",
+		"forkNote": "Crea una copia nel tuo account GitHub. GitHub potrebbe chiederti di accedere."
 	},
 	"System": {
 		"eyebrow": "IL SISTEMA DI DESIGN",

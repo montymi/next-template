@@ -116,3 +116,7 @@ In the fork, run `npm ci`, then `npm run customize -- /path/to/coast-starter.zip
 Artwork accepts PNG/JPEG/WebP under 2 MB, with a 4096-pixel dimension limit, and is rasterized locally. Artwork is held in memory; choose it again after refreshing. Optional resumes accept pasted text or `.txt`/`.md` files and produce a `PERSONALIZE.md` brief for your chosen coding agent. No AI API is invoked. The resume is not persisted to browser storage or uploaded; it is included only in the downloaded kit. The brief is excluded from Git by default. PDF parsing and automatic agent execution are not included.
 
 The local file-save endpoint remains development-only; production always returns 404. Public Save exports a kit and opens GitHub. No production file writes or GitHub tokens are needed. A tighter automatic commit/PR flow would require a GitHub App with installation permissions; it is not simulated here.
+
+### Fork directly from the site
+
+The homepage's primary **Fork on GitHub** action and the navigation link open GitHub's native `/fork` screen. Visitors sign in to their own GitHub account if needed, choose an owner and repository name, and create their copy. No configurator, resume, or kit download is required. The separate customization flow remains available when someone wants to carry their preview settings into their fork. Fork links are translated in English, Spanish, and Italian.

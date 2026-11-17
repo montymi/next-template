@@ -213,7 +213,7 @@ test('public starter kit carries identity, artwork, resume, and tokens into a fo
 	)
 	const downloadEvent = page.waitForEvent('download')
 	const popupEvent = page.waitForEvent('popup')
-	await page.getByRole('link', { name: 'Save & fork on GitHub ↗' }).click()
+	await page.getByRole('link', { name: 'Save & fork on GitHub' }).click()
 	const popup = await popupEvent
 	await expect(popup).toHaveURL('https://github.com/montymi/next-template/fork')
 	await popup.close()
@@ -260,4 +260,54 @@ test('public starter kit carries identity, artwork, resume, and tokens into a fo
 	} finally {
 		await rm(root, { recursive: true, force: true })
 	}
+})
+
+test('homepage forks directly into the visitor’s GitHub account without customization', async ({
+	page,
+	context,
+	isMobile,
+}) => {
+	await context.route(
+		'https://github.com/montymi/next-template/fork',
+		(route) =>
+			route.fulfill({
+				body: 'GitHub handles account selection and fork creation.',
+			}),
+	)
+	await page.goto('/')
+	const fork = page
+		.locator('.hero-actions')
+		.getByRole('link', { name: 'Fork on GitHub' })
+	await expect(fork).toBeVisible()
+	await expect(fork).toHaveAttribute(
+		'href',
+		'https://github.com/montymi/next-template/fork',
+	)
+	const popupPromise = page.waitForEvent('popup')
+	await fork.click()
+	const popup = await popupPromise
+	await expect(popup).toHaveURL('https://github.com/montymi/next-template/fork')
+	await popup.close()
+	await expect(page.getByRole('dialog')).not.toBeVisible()
+	if (isMobile) await page.locator('.menu-toggle').click()
+	await expect(
+		page.locator('.main-nav').getByRole('link', { name: 'Fork on GitHub' }),
+	).toBeVisible()
+	expect(
+		await page.evaluate(
+			() => document.documentElement.scrollWidth <= innerWidth,
+		),
+	).toBe(true)
+	await page.goto('/es')
+	await expect(
+		page
+			.locator('.hero-actions')
+			.getByRole('link', { name: 'Crear un fork en GitHub' }),
+	).toHaveAttribute('href', 'https://github.com/montymi/next-template/fork')
+	await page.goto('/it')
+	await expect(
+		page
+			.locator('.hero-actions')
+			.getByRole('link', { name: 'Crea un fork su GitHub' }),
+	).toHaveAttribute('href', 'https://github.com/montymi/next-template/fork')
 })

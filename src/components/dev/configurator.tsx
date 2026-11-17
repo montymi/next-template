@@ -1,4 +1,5 @@
 'use client'
+import { GitHubIcon, ForkIcon } from '@/components/ui/github-icons'
 import { useEffect, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
@@ -472,7 +473,9 @@ export default function Configurator() {
 						rel='noopener noreferrer'
 						onClick={() => void exportKit()}
 					>
-						Save & fork on GitHub ↗
+						<GitHubIcon />
+						Save &amp; fork on GitHub
+						<ForkIcon />
 					</a>
 					{isDev && (
 						<Button disabled={saving} onClick={() => void save()}>

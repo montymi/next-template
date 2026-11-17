@@ -1219,3 +1219,62 @@ dialog::backdrop {
 	width: 100%;
 	font-size: 11px;
 }
+.main-nav .nav-fork {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	padding: 10px 14px;
+	color: var(--primary-text);
+	background: var(--primary);
+	border-radius: var(--radius-small);
+}
+.main-nav .nav-fork:hover {
+	color: var(--primary-text);
+	background: var(--primary-strong);
+}
+.fork-note {
+	color: var(--muted);
+	font-size: 11px;
+	max-width: 380px;
+	margin-top: 14px;
+	line-height: 1.7;
+}
+.nav-fork svg,
+.hero-actions .button svg,
+.config-actions a svg {
+	flex-shrink: 0;
+}
+.config-actions a.button {
+	gap: 6px;
+}
+@media (min-width: 761px) and (max-width: 1050px) {
+	.site-header {
+		gap: 16px;
+	}
+	.menu-toggle {
+		display: grid;
+	}
+	.header-tools {
+		margin-left: auto;
+	}
+	.main-nav {
+		display: none;
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		padding: 20px;
+		margin: 0;
+		background: var(--surface);
+		border: 1px solid var(--border);
+	}
+	.main-nav.is-open {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+	.main-nav a {
+		padding: 12px;
+	}
+}
