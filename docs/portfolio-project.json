@@ -1,0 +1,69 @@
+{
+	"slug": "montymi-template",
+	"title": "Montymi Template",
+	"designSystem": "Coast",
+	"category": "Developer tools / design systems",
+	"summary": "Customize a coastal design system in your browser, preserve your configuration in a GitHub fork, and deploy a website you own.",
+	"description": "A Next.js starter connecting live visual customization with repository ownership. It includes coordinated palette presets, token import and export, generated brand assets, localized pages, PWA support, and a guided GitHub-to-Vercel workflow.",
+	"role": "Product direction and AI-assisted full-stack development",
+	"demoUrl": "https://template.montymi.com",
+	"repositoryUrl": "https://github.com/montymi/next-template",
+	"stack": [
+		"Next.js 16",
+		"React 19",
+		"TypeScript",
+		"Tailwind CSS 4",
+		"next-intl",
+		"next-themes",
+		"Serwist",
+		"GitHub OAuth",
+		"Playwright"
+	],
+	"features": [
+		"Live design-token editing with light and dark themes",
+		"Three coordinated palette presets",
+		"Validated token JSON import and export",
+		"Logo and avatar previews with generated web app assets",
+		"Browser-saved snapshots retained through GitHub sign-in",
+		"Saved configurations committed atomically into a new GitHub fork",
+		"English, Spanish, and Italian pages",
+		"Existing-repository Vercel import guidance"
+	],
+	"images": [
+		{
+			"source": "docs/portfolio-assets/overview-desktop.png",
+			"destination": "/images/projects/montymi-template/overview-desktop.png",
+			"alt": "Montymi Template’s coastal landing page with cobalt architectural forms and editorial typography",
+			"width": 1440,
+			"height": 1810
+		},
+		{
+			"source": "docs/portfolio-assets/overview-mobile.png",
+			"destination": "/images/projects/montymi-template/overview-mobile.png",
+			"alt": "The Coast starter’s responsive landing page on a phone-sized viewport",
+			"width": 390,
+			"height": 2212
+		},
+		{
+			"source": "docs/portfolio-assets/configurator-detail.png",
+			"destination": "/images/projects/montymi-template/configurator-detail.png",
+			"alt": "Live configurator showing palette presets and brand customization controls",
+			"width": 460,
+			"height": 982
+		}
+	],
+	"verification": {
+		"preparedDate": "2026-11-17",
+		"deployment": "Reported deployed to Vercel by owner; custom-domain availability not independently verified",
+		"githubIntegration": "Implemented; automated service responses are mocked; live visitor authorization and fork require verification",
+		"localChecks": "42 Playwright checks passed, plus lint, TypeScript, and a production build; includes desktop/mobile browser flows and policy tests with mocked GitHub responses",
+		"editorLocalization": "Configurator labels currently English; main pages support en, es, and it"
+	},
+	"publishingNotes": [
+		"Verify demo availability and OAuth activation before publishing live-demo claims",
+		"Confirm role wording with Michael; do not imply sole authorship or invent a team size",
+		"Do not invent adoption, performance, revenue, or delivery-time metrics",
+		"Resume input exports an agent brief; it does not automatically generate a website",
+		"Use the existing portfolio content schema and design system"
+	]
+}

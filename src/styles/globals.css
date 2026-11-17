@@ -1459,3 +1459,45 @@ dialog::backdrop {
 		height: 44px;
 	}
 }
+.config-panel .palette-presets {
+	margin-bottom: 24px;
+}
+.preset-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 8px;
+	margin-bottom: 10px;
+}
+.preset-grid button {
+	min-width: 0;
+	padding: 12px 6px;
+	background: var(--background);
+	color: var(--text);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-small);
+	font-size: 10px;
+	line-height: 1.4;
+}
+.preset-grid button[aria-pressed='true'] {
+	border-color: var(--primary);
+	box-shadow: inset 0 0 0 1px var(--primary);
+}
+.preset-swatches {
+	display: flex;
+	justify-content: center;
+	gap: 4px;
+	margin-bottom: 8px;
+}
+.preset-swatches > span {
+	width: 15px;
+	height: 15px;
+	border: 1px solid #0002;
+	border-radius: 50%;
+}
+.github-explainer {
+	font-size: 11px;
+	margin: 8px 0 12px;
+}
+.github-explainer .form-hint {
+	margin-top: 8px;
+}

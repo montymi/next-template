@@ -226,6 +226,15 @@ export function GitHubHandoff({
 						Your latest preview is saved automatically before continuing. Your
 						resume is never sent to GitHub.
 					</p>
+					<details className='github-explainer'>
+						<summary>Why GitHub?</summary>
+						<p className='form-hint'>
+							GitHub authorization lets this site create your fork and commit
+							the design you configured here. It requests public-repository
+							access, without requesting private-repository scope. You keep
+							ownership of the resulting code.
+						</p>
+					</details>
 					<details
 						open={optionsOpen}
 						onToggle={(e) => setOptionsOpen(e.currentTarget.open)}

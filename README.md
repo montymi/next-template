@@ -26,6 +26,8 @@ For a hosted preview, import your copy into Vercel. A remote workspace’s loopb
 Click **Customize UI** on the hosted site or while running `npm run dev`.
 
 - Edit all light and dark colors with a picker or a six-digit hex value.
+- Start with Chalk & Cobalt, Sage & Linen, or Clay & Ink. Presets update both palettes while preserving your fonts, layout, and artwork.
+- **Import JSON** restores an exported token file after validation; invalid files leave the current preview intact.
 - Select display and body fonts, adjust the spacing scale, and change corner radii.
 - Preview changes immediately across components and the design-system samples. A local browser draft survives reloads.
 - **Continue with GitHub** automatically saves the complete preview (tokens, name, logo, avatar) before sign-in. **Create my fork** saves final edits and commits that version to your new repository.
@@ -118,7 +120,7 @@ The homepage opens the configurator. There is one fork action inside it:
 4. Click **Create my fork**. Any final edits are saved automatically, then the server creates a fork in your account and applies the configuration in one commit. No source-repository changes are made.
 5. Open your repository or follow the Vercel link, then select that existing repository under **Import Git Repository**. Its build regenerates matching favicon, Apple, PWA/maskable, and social assets.
 
-Returning visitors who are already connected can go directly from editing to **Create my fork**. There is no separate save requirement. Downloads, file exports, and developer-only file saves are under **Download or export**. Missing credentials produce an explicit unavailable state and a local-save fallback.
+Returning visitors who are already connected can go directly from editing to **Create my fork**. There is no separate save requirement. Downloads, file exports, and developer-only file saves are under **Import or export**. Missing credentials produce an explicit unavailable state and a local-save fallback.
 
 Existing repositories are rejected. A receipt permits retrying a partially completed fork only for the same account, repository, and saved configuration. Branch updates are never forced. Resume text is excluded from automatic forks and saved snapshots. It can be included explicitly in a downloaded kit’s local `PERSONALIZE.md` brief for a coding agent; that file is ignored by Git. No AI service runs automatically.
 
@@ -158,3 +160,7 @@ Artwork accepts PNG/JPEG/WebP under 2 MB, at most 4096 pixels per dimension. It 
 ### Hosted instance: template.montymi.com
 
 The canonical URL is `https://template.montymi.com`, and the registered callback must be `https://template.montymi.com/api/github/callback`. Follow the [exact owner activation steps](docs/owner-setup.md), including the prefilled GitHub app registration link. The GitHub app must be created by its owner and its credentials installed on the hosting project before visitor sign-in is enabled.
+
+## Portfolio handoff
+
+See [the portfolio handoff](docs/portfolio-handoff.md) for ready-to-use project copy, evidence, screenshots, an importable content record, and integration instructions.

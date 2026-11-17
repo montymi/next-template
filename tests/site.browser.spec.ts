@@ -204,7 +204,7 @@ test('public starter kit carries identity, artwork, resume, and tokens into a fo
 	await expect(
 		page.getByRole('link', { name: /Deploy your fork/ }),
 	).toHaveAttribute('href', 'https://vercel.com/new')
-	await page.getByText('Download or export', { exact: true }).click()
+	await page.getByText('Import or export', { exact: true }).click()
 	const downloadEvent = page.waitForEvent('download')
 	await page
 		.getByRole('button', { name: 'Download starter kit', exact: true })
@@ -459,4 +459,80 @@ test('artwork controls preview, preserve on error, remove cleanly, and accept th
 		.getByRole('button', { name: 'Close configurator', exact: true })
 		.click()
 	await expect(page.getByRole('dialog')).not.toBeVisible()
+})
+
+test('palette presets and JSON import preserve identity and round-trip exported settings', async ({
+	page,
+}) => {
+	const { readFile } = await import('node:fs/promises')
+	await page.goto('/')
+	await page.getByRole('button', { name: /Customize UI/ }).click()
+	await page
+		.getByRole('textbox', { name: 'Site name', exact: true })
+		.fill('My coastal project')
+	await page.getByLabel('Corner radius', { exact: true }).fill('20')
+	await page
+		.getByRole('combobox', { name: 'Display font', exact: true })
+		.selectOption("Georgia, 'Times New Roman', serif")
+	await page
+		.getByRole('button', { name: 'Apply Sage & Linen palette', exact: true })
+		.click()
+	await expect(page.locator('html')).toHaveCSS('--primary', '#315e49')
+	await expect(page.locator('html')).toHaveCSS('--radius-medium', '20px')
+	await expect(
+		page.getByRole('textbox', { name: 'Site name', exact: true }),
+	).toHaveValue('My coastal project')
+	await expect(
+		page.getByRole('combobox', { name: 'Display font', exact: true }),
+	).toHaveValue("Georgia, 'Times New Roman', serif")
+	await page.getByText('Import or export', { exact: true }).click()
+	const downloading = page.waitForEvent('download')
+	await page.getByRole('button', { name: 'Download JSON', exact: true }).click()
+	const file = await downloading
+	const json = await readFile((await file.path())!, 'utf8')
+	const exported = JSON.parse(json)
+	expect(exported.name).toBe('Sage & Linen')
+	expect(exported.dark.primary).toBe('#A5D6B4')
+	await page
+		.getByRole('button', { name: 'Apply Clay & Ink palette', exact: true })
+		.click()
+	await expect(page.locator('html')).toHaveCSS('--primary', '#8e493b')
+	await page
+		.getByLabel('Import design tokens', { exact: true })
+		.setInputFiles({
+			name: 'saved-tokens.json',
+			mimeType: 'application/json',
+			buffer: Buffer.from(json),
+		})
+	await expect(page.locator('html')).toHaveCSS('--primary', '#315e49')
+	await expect(
+		page.getByRole('status').filter({ hasText: 'Design tokens imported.' }),
+	).toBeVisible()
+	await page
+		.getByLabel('Import design tokens', { exact: true })
+		.setInputFiles({
+			name: 'invalid.json',
+			mimeType: 'application/json',
+			buffer: Buffer.from('{"light":{"primary":"bad"}}'),
+		})
+	await expect(
+		page
+			.getByRole('status')
+			.filter({ hasText: 'Could not import design tokens.' }),
+	).toBeVisible()
+	await expect(page.locator('html')).toHaveCSS('--primary', '#315e49')
+	await page.getByRole('button', { name: 'Dark', exact: true }).click()
+	await expect(page.locator('html')).toHaveCSS('--primary', '#a5d6b4')
+	await page.getByText('Why GitHub?', { exact: true }).click()
+	await expect(
+		page.getByText(
+			'It requests public-repository access, without requesting private-repository scope.',
+			{ exact: false },
+		),
+	).toBeVisible()
+	expect(
+		await page.evaluate(
+			() => document.documentElement.scrollWidth <= innerWidth,
+		),
+	).toBe(true)
 })

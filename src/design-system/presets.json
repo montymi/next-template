@@ -1,0 +1,98 @@
+[
+	{
+		"name": "Chalk & Cobalt",
+		"inspiration": "Jørn Utzon’s Sydney Opera House: sculptural forms, light, rhythm, and generous space.",
+		"light": {
+			"background": "#F5F3EE",
+			"surface": "#FFFEFA",
+			"surfaceAlt": "#ECECF7",
+			"text": "#272B3C",
+			"muted": "#626679",
+			"primary": "#3D46A5",
+			"primaryStrong": "#2D357D",
+			"primaryText": "#FFFEFA",
+			"accent": "#AA503E",
+			"accentSurface": "#F5DFD8",
+			"border": "#DADCE6",
+			"ring": "#3D46A5"
+		},
+		"dark": {
+			"background": "#181B2B",
+			"surface": "#23273C",
+			"surfaceAlt": "#2B304A",
+			"text": "#F3F1EC",
+			"muted": "#BBBFD0",
+			"primary": "#B2BBFF",
+			"primaryStrong": "#D1D6FF",
+			"primaryText": "#191D32",
+			"accent": "#F1A08C",
+			"accentSurface": "#4B302E",
+			"border": "#414760",
+			"ring": "#B2BBFF"
+		}
+	},
+	{
+		"name": "Sage & Linen",
+		"inspiration": "Coastal gardens, weathered stone, and soft natural light.",
+		"light": {
+			"background": "#F3F1E8",
+			"surface": "#FFFEF7",
+			"surfaceAlt": "#E7EDE2",
+			"text": "#23372E",
+			"muted": "#59695E",
+			"primary": "#315E49",
+			"primaryStrong": "#234735",
+			"primaryText": "#FFFEF7",
+			"accent": "#9E4F35",
+			"accentSurface": "#F6E0D4",
+			"border": "#D1D8CB",
+			"ring": "#315E49"
+		},
+		"dark": {
+			"background": "#19261F",
+			"surface": "#22342B",
+			"surfaceAlt": "#2B4034",
+			"text": "#F2F3E9",
+			"muted": "#BACABC",
+			"primary": "#A5D6B4",
+			"primaryStrong": "#C8E7CF",
+			"primaryText": "#182A20",
+			"accent": "#F0AF8D",
+			"accentSurface": "#4A352B",
+			"border": "#435C49",
+			"ring": "#A5D6B4"
+		}
+	},
+	{
+		"name": "Clay & Ink",
+		"inspiration": "Sunlit clay, warm plaster, and quiet ink tones.",
+		"light": {
+			"background": "#F7F0E9",
+			"surface": "#FFFCF7",
+			"surfaceAlt": "#EFE1D9",
+			"text": "#342A30",
+			"muted": "#75636A",
+			"primary": "#8E493B",
+			"primaryStrong": "#6D352C",
+			"primaryText": "#FFFCF7",
+			"accent": "#624878",
+			"accentSurface": "#EADFF1",
+			"border": "#DFD0C9",
+			"ring": "#8E493B"
+		},
+		"dark": {
+			"background": "#2A2022",
+			"surface": "#36282B",
+			"surfaceAlt": "#463338",
+			"text": "#F6EDE7",
+			"muted": "#D0B9BA",
+			"primary": "#F2B49B",
+			"primaryStrong": "#FFD5C1",
+			"primaryText": "#302022",
+			"accent": "#D4BAF0",
+			"accentSurface": "#3F324D",
+			"border": "#60464C",
+			"ring": "#F2B49B"
+		}
+	}
+]

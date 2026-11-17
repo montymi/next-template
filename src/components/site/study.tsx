@@ -1,3 +1,4 @@
+import { TokenName } from '@/components/examples/token-name'
 export function ArchitectureStudy({
 	label,
 	caption,
@@ -14,7 +15,9 @@ export function ArchitectureStudy({
 				<div className='study-sail' />
 				<div className='study-disc' />
 				<div className='study-baseline' />
-				<span className='study-note'>CHALK & COBALT</span>
+				<span className='study-note'>
+					<TokenName />
+				</span>
 			</div>
 			<figcaption>
 				<span>{label}</span>

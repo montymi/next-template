@@ -1,6 +1,7 @@
 'use client'
 import { GitHubHandoff } from './github-handoff'
 import { ArtworkInput } from './artwork-input'
+import { PalettePresets } from './palette-presets'
 import { validateSnapshot, type Snapshot } from '@/lib/github/snapshot'
 import { readSaved, writeSaved } from '@/lib/github/saved'
 import { useEffect, useRef, useState } from 'react'
@@ -155,6 +156,21 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 	const repoUrl = repoMatch
 		? `https://github.com/${repoMatch[1]}/${repoMatch[2]}`
 		: ''
+	const importInput = useRef<HTMLInputElement>(null)
+	async function importTokens(file: File | undefined) {
+		if (!file) return
+		try {
+			if (file.size > 32768)
+				throw Error('Choose a token JSON file under 32 KB.')
+			const imported = validateTokens(JSON.parse(await file.text()))
+			setTokens(imported)
+			setStatus('Design tokens imported. Your name and artwork are unchanged.')
+		} catch (error) {
+			setStatus(
+				`Could not import design tokens. ${error instanceof SyntaxError ? 'Choose a valid JSON file.' : error instanceof Error ? error.message : 'Use a valid exported token file.'}`,
+			)
+		}
+	}
 	const dialog = useRef<HTMLDialogElement>(null)
 	useEffect(() => {
 		const open = () => dialog.current?.showModal()
@@ -316,6 +332,13 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 							Dark
 						</button>
 					</div>
+					<PalettePresets
+						tokens={tokens}
+						onChange={(next) => {
+							setTokens(next)
+							setStatus(`${next.name} palette applied.`)
+						}}
+					/>
 					<fieldset>
 						<legend>Identity & artwork</legend>
 						<label className='config-label'>
@@ -519,8 +542,27 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 						</label>
 					</fieldset>
 					<details className='download-options'>
-						<summary>Download or export</summary>
+						<summary>Import or export</summary>
 						<div className='config-actions'>
+							<Button
+								variant='secondary'
+								onClick={() => importInput.current?.click()}
+							>
+								Import JSON
+							</Button>
+							<input
+								type='file'
+								className='sr-only'
+								tabIndex={-1}
+								aria-label='Import design tokens'
+								accept='.json,application/json'
+								ref={importInput}
+								onChange={(event) => {
+									const file = event.target.files?.[0]
+									event.target.value = ''
+									void importTokens(file)
+								}}
+							/>
 							{isDev && (
 								<Button
 									disabled={saving || preparing}
