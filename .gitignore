@@ -47,3 +47,12 @@ workbox-*.js
 worker-*.js 
 workbox-*.js.map
 worker-*.js.map
+
+# Generated app and browser-test output
+/.swc/
+/playwright-report/
+/test-results/
+/public/swe-worker-*.js
+
+# Non-secret configuration example
+!.env.example

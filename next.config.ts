@@ -1,21 +1,13 @@
 import type { NextConfig } from 'next'
-import locales from './src/locales.json'
+import createNextIntlPlugin from 'next-intl/plugin'
+import withSerwistInit from '@serwist/next'
 
-// next.js config
-const nextConfig: NextConfig = {
-	reactStrictMode: true,
-	i18n: {
-		locales,
-		defaultLocale: 'en',
-		localeDetection: false,
-	},
-}
-
-const withPWA = require('next-pwa')({
-	dest: 'public',
-	register: true,
-	skipWaiting: true,
-	disable: process.env.NODE_ENV === 'development',
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
+const withSerwist = withSerwistInit({
+	swSrc: 'src/sw.ts',
+	swDest: 'public/sw.js',
+	disable: process.env.NODE_ENV !== 'production',
+	globPublicPatterns: ['**/*', '!**/*.map'],
 })
-
-export default withPWA(nextConfig)
+const nextConfig: NextConfig = { reactStrictMode: true }
+export default withSerwist(withNextIntl(nextConfig))

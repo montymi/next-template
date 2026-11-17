@@ -1,351 +1,108 @@
-<div id="readme-top"></div>
+# Coast · Next.js template
 
-<!-- PROJECT SHIELDS -->
+A coastal architectural starter with generous space, Newsreader and Inter typography, and a **Chalk & Cobalt** palette: chalk, cobalt, pale lavender, and muted coral. Its forms borrow from the light and sculptural rhythm of Jørn Utzon’s Sydney Opera House.
 
-[![Creator][creator-shield]][creator-url]
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![License][license-shield]][license-url]
+Includes a landing page, a live design-system page, and a getting-started guide. Neutral branding and original geometric artwork make it ready for a new project.
 
-<!-- PROJECT HEADER -->
+## Start
 
-# 📑 next-template
+Use **Node.js 24** and npm.
 
-> Production-ready Next.js starter with TypeScript, Tailwind, and i18n support. PWA-enabled for modern web development.
-
-<!-- CALL TO ACTIONS -->
-
-[![🚀 Explore Demo][demo-shield]][demo-url]
-[![🐛 Report Bug][bug-shield]][bug-url]
-[![✨ Request Feature][feature-shield]][feature-url]
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li><a href="#installation">Installation</a></li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#structure">Structure</a></li>
-    <li><a href="#tasks">Tasks</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-<br />
-
-<!-- ABOUT THE PROJECT -->
-
-## About The Project
-
-A modern, feature-rich Next.js template that provides everything you need to build production-ready web applications. Built with TypeScript and React, this template includes:
-
-- 🌍 **Internationalization** - Built-in support for multiple languages using next-localization
-- 🎨 **Theme System** - Dark/light mode with customizable color schemes using Tailwind CSS
-- 📱 **PWA Ready** - Progressive Web App support for offline functionality and mobile installation
-- ⚡ **Performance Focused** - Server-side rendering and static site generation capabilities
-- 🧪 **Testing Suite** - Comprehensive testing setup with Jest and React Testing Library
-- 🔍 **Code Quality** - ESLint, Prettier, and CommitLint for consistent code style
-- 🐶 **Git Hooks** - Husky for pre-commit formatting and pre-push testing
-- 📦 **Component Library** - Reusable React components with TypeScript types
-- 🛡️ **Type Safety** - Full TypeScript support throughout the project
-- 📄 **Documentation** - Extensive documentation and examples
-
-This template serves as a foundation for building modern web applications, incorporating best practices and popular tools from the React/Next.js ecosystem. It's designed to be both developer-friendly and production-ready, with careful attention to performance, accessibility, and user experience.
-
-### Built With
-
-[![Next.js][next-shield]][next-url]
-[![React][react-shield]][react-url]
-[![TypeScript][ts-shield]][ts-url]
-[![TailwindCSS][tailwind-shield]][tailwind-url]
-[![Jest][jest-shield]][jest-url]
-[![ESLint][eslint-shield]][eslint-url]
-[![CommitLint][commitlint-shield]][commitlint-url]
-[![Prettier][prettier-shield]][prettier-url]
-[![PWA][pwa-shield]][pwa-url]
-[![Husky][husky-shield]][husky-url]
-[![i18n][i18n-shield]][i18n-url]
-[![HTML5][html-shield]][html-url]
-[![Markdown][md-shield]][md-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- GETTING STARTED -->
-
-## Installation
-
-### Prerequisites
-
-- Node.js 18.17 or later
-- npm or yarn package manager
-
-### Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/montymi/next-template
-
-# Navigate to project directory
-cd next-template
-
-# Install dependencies
-npm install
-
-# Install Husky git hooks
-npm run prepare
-
-# Generate locale mappings
-npm run prebuild
-```
-
-## Usage
-
-The project includes several npm scripts for development, testing, and code quality:
-
-### Development
-
-```bash
-# Start development server at http://localhost:3000
+```sh
+npm ci
 npm run dev
-
-# Start production server
-npm run start
 ```
 
-### Testing
+Open the address printed by Next.js on the computer running it. To use another port:
 
-```bash
-# Run all tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Generate test coverage report
-npm run test:coverage
+```sh
+npm run dev -- --hostname 0.0.0.0 --port 3002
 ```
 
-### Code Quality
+For a hosted preview, import your copy into Vercel. A remote workspace’s loopback address is accessible only inside that workspace; use its forwarded URL when viewing from another device.
 
-```bash
-# Run ESLint
+## Customize in development
+
+Click **Customize UI · DEV** while running `npm run dev`.
+
+- Edit all light and dark colors with a picker or a six-digit hex value.
+- Select display and body fonts, adjust the spacing scale, and change corner radii.
+- Preview changes immediately across components and the design-system samples. A local browser draft survives reloads.
+- **Save to project** writes `src/design-system/tokens.json` and regenerates `src/styles/tokens.css`. Next.js refreshes the page. The project directory must be writable.
+- **Download JSON** and **Copy JSON** export the draft. Replace the token JSON with an export and run `npm run brand` to apply it and refresh icons.
+- **Reset preview** restores the current project tokens. It does not undo an already saved change; use Git to restore an earlier version.
+
+The configurator is mounted only in development. The `/api/dev/tokens` endpoint returns **404 in production**, including token reads. Development writes require a same-origin JSON request and a validated document of at most 32 KiB. Paths cannot be supplied by the browser. Fonts are limited to bundled and system fonts; add new choices deliberately in `src/design-system/format.mjs`.
+
+Saving updates live UI tokens. Run `npm run brand` after choosing a final palette to update installed app icons, manifests, and the social image. Previously installed apps may retain icons until their next browser update.
+
+## Make it your own
+
+| File                            | Purpose                                             |
+| ------------------------------- | --------------------------------------------------- |
+| `src/config/site.json`          | Site name, short name, repository URL               |
+| `src/design-system/tokens.json` | Both palettes, fonts, spacing, corner radii         |
+| `src/styles/globals.css`        | Responsive layout and component styles              |
+| `src/components/site/mark.tsx`  | On-page geometric mark                              |
+| `scripts/generate-icons.mjs`    | Matching favicon, app icons, social card, manifests |
+| `messages/{en,es,it}.json`      | English, Spanish, and Italian copy                  |
+| `src/components/ui/`            | Button, card, input, arrow                          |
+| `src/app/[locale]/`             | Localized App Router pages                          |
+
+```sh
+npm run brand     # Regenerate tokens + brand assets after editing their sources
+npm run messages  # Verify all locales have matching, nonempty translation keys
+```
+
+Generated `tokens.css` is committed for immediate development startup. Edit its JSON source rather than the CSS file. The build regenerates tokens and checks translations. Local fonts and their licenses are included; runtime font downloads are unnecessary.
+
+## Languages and themes
+
+English is the fallback. Spanish uses `/es` and Italian `/it`; English uses unprefixed routes. `next-intl` detects the browser language on the first visit and remembers the language picker in a `NEXT_LOCALE` cookie. The picker keeps the current page. Change routing behavior in `src/i18n/routing.ts` and add matching message files when adding languages.
+
+`next-themes` uses the system theme initially and remembers an explicit choice. Light and dark palettes share semantic CSS variables such as `--background`, `--primary`, `--surface-alt`, and `--ring`.
+
+## Checks
+
+```sh
+npx playwright install --with-deps chromium  # Once, if Chromium is not installed
 npm run lint
-
-# Format code with Prettier
-npm run format
+npm run typecheck
+npm test                                     # Production build + Playwright
+npm run test:e2e                              # Reuse a completed production build
+npm run test:ui
 ```
 
-### Build Process
+Playwright runs desktop and mobile browser flows against production and development servers on ports **3200 and 3201**. Checks cover localization, theme persistence, functional examples, layout overflow, icons, offline public pages, the configurator, export, saving, and production restrictions. Token writer tests use a temporary directory; browser save tests preserve the checked-in palette. Tests prefer `/usr/bin/chromium` if present, or `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`, then Playwright’s browser installation.
 
-```bash
-# Full production build
+Husky runs lint on commit and the full test command on push. Conventional Commits are checked on commit. CI repeats lint, types, and Playwright and uploads failure artifacts.
+
+## Deployment
+
+Vercel can import this repository with its standard Next.js preset. `vercel.json` uses a clean npm install and the production build. Set the optional `NEXT_PUBLIC_SITE_URL` to your canonical HTTPS origin when using a custom domain. Vercel’s environment hostname is used when this variable is absent. No credentials are needed for the starter.
+
+For a Node host:
+
+```sh
+npm ci
 npm run build
+npm run start -- --hostname 0.0.0.0 --port 3000
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Use a single build before starting the production server. The configurator is a local development tool and is unavailable on a production deployment.
 
-<!-- STRUCTURE -->
+## App services and offline behavior
 
-## Structure
+This is a UI starter. Add your project’s authentication, database, authorization, and service integrations when needed. A form on the design-system page demonstrates local interaction and explicitly sends no information.
 
-```
-next-template/
-├── __tests__/             # Test files
-│   ├── components/        # Component tests
-│   ├── hooks/             # Hook tests
-│   └── pages/             # Page tests
-├── public/                # Static files
-│   ├── images/            # Image assets
-│   ├── locales/           # Translation files
-│   └── manifest.json      # PWA manifest
-├── scripts/               # Build Scripts
-│   └── generate-locale-map.js
-├── src/                   # Source code
-│   ├── components/        # React components
-│   │   ├── title.tsx
-│   │   ├── Header.tsx
-│   │   └── Footer.tsx
-│   ├── hooks/             # Custom React hooks
-│   │   └── useNamespace.tsx
-│   ├── pages/             # Next.js pages
-│   │   ├── _app.tsx       # App wrapper
-│   │   ├── _document.tsx  # Document wrapper
-│   │   ├── index.tsx      # Home page
-│   │   ├── 404.tsx        # Error page
-│   │   ├── 500.tsx        # Server error page
-│   │   ├── about.tsx      # About page
-│   │   ├── dashboard.tsx  # Dashboard page
-│   │   ├── profile.tsx    # Profile page
-│   │   └── services.tsx   # Services page
-│   └── styles/            # Stylesheets
-│       ├── mappings.ts    # Locale Mapping
-│       └── globals.css    # Global styles
-├── commitlint.config.js   # ESLint configuration
-├── eslint.config.mjs      # ESLint configuration
-├── .prettierrc            # Prettier configuration
-├── jest.config.ts         # Jest configuration
-├── next.config.ts         # Next.js configuration
-├── tailwind.config.ts     # Tailwind configuration
-├── tsconfig.json          # TypeScript configuration
-└── package.json           # Dependencies and scripts
-```
+Serwist precaches public assets and supports revisiting public pages offline. APIs and `/login` or `/account` routes always use the network. **Before adding private pages, extend the network-only matcher in `src/sw.ts` to cover every private route**, and avoid caching user data. Development disables the service worker. Development and production use Webpack because the installed Serwist integration supports it.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Current stack: Next.js 16, React 19, TypeScript, Tailwind CSS 4, `next-intl`, `next-themes`, Serwist, ESLint flat config, and Playwright. ESLint 9 matches the React plugin’s peer range in this dependency set.
 
-<!-- TASKS -->
+## Use as a GitHub template
 
-## Tasks
-
-- [ ] **Testing**
-
-  - [ ] Add unit tests for all components
-  - [ ] Add integration tests for pages
-  - [ ] Add end-to-end tests using Cypress or Playwright
-  - [ ] Setup test coverage reporting
-
-- [ ] **Internationalization**
-
-  - [ ] Add more language support
-  - [ ] Implement RTL support for Arabic/Hebrew
-  - [ ] Add language detection
-  - [ ] Create translation contribution guide
-
-- [ ] **Documentation**
-
-  - [ ] Add JSDoc comments to all components
-  - [ ] Create Storybook documentation
-  - [ ] Add API documentation
-  - [ ] Create contributing guidelines
-
-- [ ] **Performance**
-
-  - [ ] Implement image optimization
-  - [ ] Add lazy loading for components
-  - [ ] Optimize bundle size
-  - [ ] Add performance monitoring
-
-- [ ] **Accessibility**
-
-  - [ ] Add ARIA labels
-  - [ ] Implement keyboard navigation
-  - [ ] Add screen reader support
-  - [ ] Create accessibility guide
-
-- [ ] **Security**
-  - [ ] Add security headers
-  - [ ] Implement CSP
-  - [ ] Add rate limiting
-  - [ ] Setup security scanning
-
-See the [open issues][bug-url] for a full list of issues and proposed features.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTRIBUTING -->
-
-## Contributing
-
-1. [Fork the Project](https://docs.github.com/en/get-started/quickstart/fork-a-repo)
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`) using the following [naming convention](https://dev.to/varbsan/a-simplified-convention-for-naming-branches-and-commits-in-git-il4)
-3. Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`) while adhering to the specifications of [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. [Open a Pull Request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- LICENSE -->
+If you own the repository, enable **Settings → General → Template repository**. Then choose **Use this template → Create a new repository** on GitHub, choose your visibility, and customize the files above. Template copies do not inherit the source’s Git history.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<br />
-
-<!-- CONTACT -->
-
-## Contact
-
-Michael Montanaro
-
-[linkedin-shield]: https://cdn-icons-png.flaticon.com/512/174/174857.png
-[github-shield]: https://cdn-icons-png.flaticon.com/512/733/733553.png
-[linkedin-url]: https://linkedin.com/in/michael-montanaro
-[github-url]: https://github.com/montymi
-
-<a href="https://linkedin.com/in/michael-montanaro/" target="_blank">
-  <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" width="20" height="20" />
-</a>
-<a href="https://github.com/montymi/" target="_blank">
-  <img src="https://cdn-icons-png.flaticon.com/512/733/733553.png" width="20" height="20" />
-</a>
-
-<br />
-
-<!-- ACKNOWLEDGMENTS -->
-
-## Acknowledgments
-
-- [Choose an Open Source License](https://choosealicense.com)
-- [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-- [Font Awesome](https://fontawesome.com)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[demo-shield]: https://img.shields.io/badge/🚀%20Explore%20Demo-grey?style=for-the-badge
-[demo-url]: https://github.com/montymi/next-template
-[bug-shield]: https://img.shields.io/badge/🐛%20Report%20Bug-grey?style=for-the-badge
-[bug-url]: https://github.com/montymi/next-template/issues
-[feature-shield]: https://img.shields.io/badge/✨%20Request%20Feature-grey?style=for-the-badge
-[feature-url]: https://github.com/montymi/next-template/issues
-[creator-shield]: https://img.shields.io/badge/-Created%20by%20montymi-maroon.svg?style=for-the-badge
-[creator-url]: https://montymi.com/
-[contributors-shield]: https://img.shields.io/github/contributors/montymi/ClearDocs.svg?style=for-the-badge
-[contributors-url]: https://github.com/montymi/next-template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/montymi/next-template.svg?style=for-the-badge
-[forks-url]: https://github.com/montymi/next-template/network/members
-[stars-shield]: https://img.shields.io/github/stars/montymi/next-template.svg?style=for-the-badge
-[stars-url]: https://github.com/montymi/next-template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/montymi/next-template.svg?style=for-the-badge
-[issues-url]: https://github.com/montymi/next-template/issues
-[license-shield]: https://img.shields.io/github/license/montymi/next-template.svg?style=for-the-badge
-[license-url]: https://github.com/montymi/next-template/blob/main/LICENSE.txt
-[next-shield]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[next-url]: https://nextjs.org/
-[ts-shield]: https://img.shields.io/badge/Typescript-black?style=for-the-badge&logo=typescript&logoColor=natural
-[ts-url]: https://www.typescriptlang.org/
-[md-shield]: https://img.shields.io/badge/Markdown-black?style=for-the-badge&logo=markdown&logoColor=natural
-[md-url]: https://daringfireball.net/projects/markdown/
-[html-shield]: https://img.shields.io/badge/HTML5-black?style=for-the-badge&logo=html5&logoColor=natural
-[html-url]: https://html.spec.whatwg.org/
-[tailwind-shield]: https://img.shields.io/badge/Tailwindcss-black?style=for-the-badge&logo=tailwindcss&logoColor=natural
-[tailwind-url]: https://tailwindcss.com/
-[jest-shield]: https://img.shields.io/badge/Jest-black?style=for-the-badge&logo=jest&logoColor=natural
-[jest-url]: https://jestjs.io/
-[react-shield]: https://img.shields.io/badge/React-black?style=for-the-badge&logo=react&logoColor=natural
-[react-url]: https://react.dev/
-[eslint-shield]: https://img.shields.io/badge/ESLint-black?style=for-the-badge&logo=eslint&logoColor=natural
-[eslint-url]: https://eslint.org/
-[prettier-shield]: https://img.shields.io/badge/Prettier-black?style=for-the-badge&logo=prettier&logoColor=natural
-[prettier-url]: https://prettier.io/
-[pwa-shield]: https://img.shields.io/badge/PWA-black?style=for-the-badge&logo=pwa&logoColor=natural
-[pwa-url]: https://web.dev/explore/progressive-web-apps
-[husky-shield]: https://img.shields.io/badge/🐶Husky-black?style=for-the-badge&logoColor=natural
-[husky-url]: https://typicode.github.io/husky/
-[i18n-shield]: https://img.shields.io/badge/🌍i18n-black?style=for-the-badge&logoColor=natural
-[i18n-url]: https://github.com/StarpTech/next-localization
-[commitlint-shield]: https://img.shields.io/badge/commitlint-black?style=for-the-badge&logo=commitlint&logoColor=natural
-[commitlint-url]: https://commitlint.js.org/
+MIT; see [LICENSE.txt](LICENSE.txt). Bundled font licenses are in `public/fonts/`.
