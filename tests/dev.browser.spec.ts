@@ -19,6 +19,7 @@ test('editor previews tokens, persists a draft, exports JSON, and resets', async
 	)
 	await page.getByLabel('Corner radius', { exact: true }).fill('20')
 	await expect(page.locator('html')).toHaveCSS('--radius-medium', '20px')
+	await page.getByText('Download or export', { exact: true }).click()
 	const download = page.waitForEvent('download')
 	await page.getByRole('button', { name: 'Download JSON' }).click()
 	const file = await download
@@ -35,6 +36,8 @@ test('editor previews tokens, persists a draft, exports JSON, and resets', async
 	await expect(page.getByLabel('Primary hex', { exact: true })).toHaveValue(
 		'#205A79',
 	)
+	if ((await page.locator('.download-options').getAttribute('open')) === null)
+		await page.getByText('Download or export', { exact: true }).click()
 	await page.getByRole('button', { name: 'Reset preview' }).click()
 	await expect(page.getByLabel('Primary hex', { exact: true })).toHaveValue(
 		tokens.light.primary,
@@ -42,6 +45,8 @@ test('editor previews tokens, persists a draft, exports JSON, and resets', async
 	await page.getByRole('button', { name: 'Dark', exact: true }).click()
 	await page.getByLabel('Background hex', { exact: true }).fill('#152A36')
 	await expect(page.locator('html')).toHaveCSS('--background', '#152a36')
+	if ((await page.locator('.download-options').getAttribute('open')) === null)
+		await page.getByText('Download or export', { exact: true }).click()
 	await page.getByRole('button', { name: 'Reset preview' }).click()
 	await page.getByRole('button', { name: 'Light', exact: true }).click()
 	await page.keyboard.press('Escape')
@@ -58,6 +63,8 @@ test('save writes the validated project JSON and regenerates CSS', async ({
 }) => {
 	await page.goto('/')
 	await page.getByRole('button', { name: /Customize UI/ }).click()
+	if ((await page.locator('.download-options').getAttribute('open')) === null)
+		await page.getByText('Download or export', { exact: true }).click()
 	await page.getByRole('button', { name: 'Reset preview' }).click()
 	await page
 		.getByRole('button', { name: 'Save tokens locally', exact: true })

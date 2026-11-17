@@ -207,6 +207,7 @@ test('public starter kit carries identity, artwork, resume, and tokens into a fo
 		'href',
 		/repository-url=https%3A%2F%2Fgithub.com%2Falex%2Fportfolio/,
 	)
+	await page.getByText('Download or export', { exact: true }).click()
 	const downloadEvent = page.waitForEvent('download')
 	await page
 		.getByRole('button', { name: 'Download starter kit', exact: true })
@@ -276,8 +277,12 @@ test.describe('Configured GitHub handoff', () => {
 			})
 		})
 		let submitted: Record<string, unknown> | undefined
-		await page.route('**/api/github/fork', (route) => {
+		let releaseFork: (() => void) | undefined
+		await page.route('**/api/github/fork', async (route) => {
 			submitted = route.request().postDataJSON()
+			await new Promise<void>((resolve) => {
+				releaseFork = resolve
+			})
 			return route.fulfill({
 				json: {
 					repository: 'https://github.com/alex/personal-site',
@@ -304,19 +309,8 @@ test.describe('Configured GitHub handoff', () => {
 		await page
 			.getByRole('textbox', { name: 'Resume text', exact: true })
 			.fill('Private resume should never reach GitHub.')
-		await expect(
-			page.getByRole('button', { name: 'Connect GitHub', exact: true }),
-		).toBeDisabled()
 		await page
-			.getByRole('button', { name: 'Save configuration', exact: true })
-			.click()
-		await expect(
-			page
-				.getByRole('status')
-				.filter({ hasText: 'Configuration saved in this browser.' }),
-		).toBeVisible()
-		await page
-			.getByRole('button', { name: 'Connect GitHub', exact: true })
+			.getByRole('button', { name: 'Continue with GitHub', exact: true })
 			.click()
 		await expect(page.getByRole('dialog')).toBeVisible()
 		await expect(
@@ -328,19 +322,20 @@ test.describe('Configured GitHub handoff', () => {
 		await expect(page.locator('.brand-upload')).toBeVisible()
 		await page.getByLabel('Primary hex', { exact: true }).fill('#224466')
 		await expect(
-			page.getByRole('button', { name: 'Fork saved version', exact: true }),
-		).toBeDisabled()
+			page.getByRole('button', { name: 'Create my fork', exact: true }),
+		).toBeEnabled()
+		await page.getByText('Repository options', { exact: true }).click()
 		await page
-			.getByRole('button', { name: 'Save configuration', exact: true })
-			.click()
-		await page
-			.getByRole('textbox', { name: 'New repository name' })
+			.getByRole('textbox', { name: 'Repository name', exact: true })
 			.fill('personal-site')
 		await page
-			.getByRole('button', { name: 'Fork saved version', exact: true })
+			.getByRole('button', { name: 'Create my fork', exact: true })
 			.click()
+		await expect(page.getByLabel('Primary hex', { exact: true })).toBeDisabled()
+		await expect.poll(() => typeof releaseFork).toBe('function')
+		releaseFork!()
 		await expect(
-			page.getByRole('link', { name: 'Open your configured fork ↗' }),
+			page.getByRole('link', { name: 'Open my repository', exact: true }),
 		).toHaveAttribute('href', 'https://github.com/alex/personal-site')
 		const snapshot = submitted?.snapshot as {
 			tokens: { light: { primary: string } }
@@ -360,12 +355,12 @@ test('missing GitHub app is explicit and never silently forks the original', asy
 	await page.goto('/')
 	await page.getByRole('button', { name: /Customize UI/ }).click()
 	await expect(
-		page.getByText('GitHub sign-in is not enabled on this deployment yet.', {
+		page.getByText('GitHub sign-in isn’t enabled on this site yet.', {
 			exact: false,
 		}),
 	).toBeVisible()
 	await expect(
-		page.getByRole('button', { name: 'Fork saved version' }),
+		page.getByRole('button', { name: 'Create my fork' }),
 	).toHaveCount(0)
 	expect((await request.get('/api/github/authorize')).status()).toBe(503)
 	expect(

@@ -28,7 +28,7 @@ Click **Customize UI** on the hosted site or while running `npm run dev`.
 - Edit all light and dark colors with a picker or a six-digit hex value.
 - Select display and body fonts, adjust the spacing scale, and change corner radii.
 - Preview changes immediately across components and the design-system samples. A local browser draft survives reloads.
-- **Save configuration** stores a complete version (tokens, name, logo, avatar) in this browser. After connecting GitHub, **Fork saved version** creates your fork and commits that saved version. Unsaved changes must be saved first.
+- **Continue with GitHub** automatically saves the complete preview (tokens, name, logo, avatar) before sign-in. **Create my fork** saves final edits and commits that version to your new repository.
 - **Save tokens locally** (development only) writes `src/design-system/tokens.json` and regenerates `src/styles/tokens.css`. Next.js refreshes the page. The project directory must be writable.
 - **Download JSON** and **Copy JSON** export the draft. Replace the token JSON with an export and run `npm run brand` to apply it and refresh icons.
 - **Reset preview** restores the current project tokens. It does not undo an already saved change; use Git to restore an earlier version.
@@ -113,14 +113,24 @@ MIT; see [LICENSE.txt](LICENSE.txt). Bundled font licenses are in `public/fonts/
 The homepage opens the configurator. There is one fork action inside it:
 
 1. Customize the colors, type, spacing, name, logo, and avatar.
-2. **Save configuration** stores a validated snapshot in IndexedDB. This includes artwork and survives GitHub’s sign-in redirect. Changing any setting disables forking until the new version is saved.
-3. **Connect GitHub** authorizes the visitor’s account, then returns to the editor with the saved configuration intact.
-4. Choose a new repository name and click **Fork saved version**. The server creates a fork in that account and applies the saved JSON, CSS, logo, and avatar in one commit. No source-repository changes are made.
-5. Open the resulting repository, review its commit, or deploy that fork on Vercel. Its build regenerates matching favicon, Apple, PWA/maskable, and social assets.
+2. Click **Continue with GitHub**. The latest preview is saved in IndexedDB automatically before sign-in. Artwork survives the redirect. The proposed repository name comes from your site name; **Repository options** lets you change it and retains that choice through sign-in.
+3. Authorize the site on GitHub. You return to the same editor with your configuration intact.
+4. Click **Create my fork**. Any final edits are saved automatically, then the server creates a fork in your account and applies the configuration in one commit. No source-repository changes are made.
+5. Open your repository or deploy it on Vercel. Its build regenerates matching favicon, Apple, PWA/maskable, and social assets.
+
+Returning visitors who are already connected can go directly from editing to **Create my fork**. There is no separate save requirement. Downloads, file exports, and developer-only file saves are under **Download or export**. Missing credentials produce an explicit unavailable state and a local-save fallback.
 
 Existing repositories are rejected. A receipt permits retrying a partially completed fork only for the same account, repository, and saved configuration. Branch updates are never forced. Resume text is excluded from automatic forks and saved snapshots. It can be included explicitly in a downloaded kit’s local `PERSONALIZE.md` brief for a coding agent; that file is ignored by Git. No AI service runs automatically.
 
 ### Enable GitHub sign-in on a deployment
+
+The guided owner setup starts with:
+
+```sh
+npm run github:setup -- https://YOUR-DOMAIN
+```
+
+It provides a GitHub registration link with your homepage and callback URL filled in. Create the OAuth app on GitHub, then enter its Client ID and client secret into the terminal (the secret is hidden). The command generates a session key and writes the four variables below to a Git-ignored `.env.local` with private file permissions, preserving unrelated variables. For a Vercel deployment, copy those variables into the project’s environment settings and redeploy. The command does not create the OAuth app or publish a deployment for you. Do not paste secrets into chat.
 
 Create a GitHub OAuth app under **GitHub Settings → Developer settings → OAuth Apps**. Set its Homepage URL to your site and Authorization callback URL to `https://YOUR-DOMAIN/api/github/callback`. Configure these **server-only** environment variables on Vercel or your Node host, then redeploy:
 
@@ -144,3 +154,7 @@ Tests cover client redirect recovery and exact saved-snapshot submission with in
 **Download starter kit** exports the current preview. In a manually created fork run `npm ci`, then `npm run customize -- /path/to/coast-starter.zip`. This validates the archive, applies the configuration, and regenerates brand assets. Advanced deployment tools accept an existing fork URL for Codespaces and Vercel links. The download workflow does not automatically commit to GitHub.
 
 Artwork accepts PNG/JPEG/WebP under 2 MB, at most 4096 pixels per dimension. It is rasterized and reduced to 512 pixels before saving. Saved versions persist artwork in this browser; unsaved artwork is lost on refresh. The optional resume stays in memory and is never sent by automatic fork creation. PDF parsing is not included.
+
+### Hosted instance: template.montymi.com
+
+The canonical URL is `https://template.montymi.com`, and the registered callback must be `https://template.montymi.com/api/github/callback`. Follow the [exact owner activation steps](docs/owner-setup.md), including the prefilled GitHub app registration link. The GitHub app must be created by its owner and its credentials installed on the hosting project before visitor sign-in is enabled.

@@ -20,7 +20,8 @@
 		"brand": "npm run tokens && npm run icons",
 		"messages": "node scripts/validate-messages.mjs",
 		"customize": "node scripts/apply-starter.mjs",
-		"predev": "npm run brand"
+		"predev": "npm run brand",
+		"github:setup": "node scripts/setup-github.mjs"
 	},
 	"dependencies": {
 		"@serwist/next": "9.5.14",

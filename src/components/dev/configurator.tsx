@@ -90,7 +90,6 @@ function ColorField({
 }
 
 function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
-	const [savedSnapshot, setSavedSnapshot] = useState(initialSaved)
 	const [tokens, setTokens] = useState<DesignTokens>(() => {
 		try {
 			const draft = localStorage.getItem(storageKey)
@@ -104,24 +103,27 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 	)
 	const [status, setStatus] = useState('')
 	const [saving, setSaving] = useState(false)
+	const [flowBusy, setFlowBusy] = useState(false)
 	const [brand, setBrand] = useState(
 		initialSaved?.brand ?? { ...brandSource, name: site.name },
 	)
 	const [resume, setResume] = useState('')
 	const [repo, setRepo] = useState('')
 	const snapshot: Snapshot = { version: 1, tokens, brand }
-	const dirty = JSON.stringify(snapshot) !== JSON.stringify(savedSnapshot)
-	async function saveConfiguration() {
+	async function saveConfiguration(): Promise<Snapshot> {
 		setSaving(true)
 		try {
 			const saved = validateSnapshot(snapshot)
 			await writeSaved(saved)
-			setSavedSnapshot(saved)
 			setBrand(saved.brand)
 			setTokens(saved.tokens)
-			setStatus('Configuration saved in this browser. Ready to fork.')
+			setStatus('Configuration saved in this browser.')
+			return saved
 		} catch {
 			setStatus(
+				'Could not save in this browser. Check storage permissions or use Download starter kit.',
+			)
+			throw Error(
 				'Could not save in this browser. Check storage permissions or use Download starter kit.',
 			)
 		} finally {
@@ -285,11 +287,15 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 						×
 					</button>
 				</header>
-				<div className='config-body'>
+				<fieldset
+					className='config-body'
+					disabled={flowBusy}
+					aria-label='Website configuration'
+				>
 					<p className='config-intro'>
-						Customize your site, save a version, then connect GitHub to create a
-						fork with that version committed. Saving keeps your settings and
-						artwork in this browser. Resumes are excluded from automatic forks.
+						Customize your site, then continue with GitHub. We save your latest
+						design before sign-in and apply it to your new repository. Your
+						resume is excluded.
 					</p>
 					<div className='config-tabs' aria-label='Color mode'>
 						<button
@@ -378,7 +384,7 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 							coding agent. No resume is uploaded or sent to an AI service.
 						</p>
 					</fieldset>
-					<GitHubHandoff saved={savedSnapshot} dirty={dirty} />
+
 					<details className='export-options'>
 						<summary>Downloads & deployment tools</summary>{' '}
 						<fieldset>
@@ -506,33 +512,38 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 							/>
 						</label>
 					</fieldset>
-				</div>
-				<div className='config-actions'>
-					<Button disabled={saving} onClick={() => void saveConfiguration()}>
-						{saving ? 'Saving…' : 'Save configuration'}
-					</Button>
-					{isDev && (
-						<Button disabled={saving} onClick={() => void save()}>
-							Save tokens locally
-						</Button>
-					)}
-					<Button
-						disabled={saving}
-						variant='secondary'
-						onClick={() => void exportKit()}
-					>
-						Download starter kit
-					</Button>
-					<Button variant='secondary' onClick={download}>
-						Download JSON
-					</Button>
-					<Button variant='quiet' onClick={() => void copy()}>
-						Copy JSON
-					</Button>
-					<Button variant='quiet' onClick={reset}>
-						Reset preview
-					</Button>
-				</div>
+					<details className='download-options'>
+						<summary>Download or export</summary>
+						<div className='config-actions'>
+							{isDev && (
+								<Button disabled={saving} onClick={() => void save()}>
+									Save tokens locally
+								</Button>
+							)}
+							<Button
+								disabled={saving}
+								variant='secondary'
+								onClick={() => void exportKit()}
+							>
+								Download starter kit
+							</Button>
+							<Button variant='secondary' onClick={download}>
+								Download JSON
+							</Button>
+							<Button variant='quiet' onClick={() => void copy()}>
+								Copy JSON
+							</Button>
+							<Button variant='quiet' onClick={reset}>
+								Reset preview
+							</Button>
+						</div>
+					</details>
+				</fieldset>
+				<GitHubHandoff
+					snapshot={snapshot}
+					onSave={saveConfiguration}
+					onBusyChange={setFlowBusy}
+				/>
 				<p className='config-status' role='status'>
 					{status}
 				</p>
