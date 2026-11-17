@@ -193,6 +193,10 @@ export function GitHubHandoff({
 						Open my repository
 					</a>
 					<div className='config-links'>
+						<p className='form-hint'>
+							In Vercel, choose Import Git Repository and select{' '}
+							{visibleResult.repository.replace('https://github.com/', '')}.
+						</p>
 						<a
 							href={visibleResult.deploy}
 							target='_blank'

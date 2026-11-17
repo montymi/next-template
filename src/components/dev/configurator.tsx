@@ -409,6 +409,10 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 							</label>
 							{repoUrl && (
 								<div className='config-links'>
+									<p className='form-hint'>
+										In Vercel, choose Import Git Repository and select{' '}
+										{repoUrl.replace('https://github.com/', '')}.
+									</p>
 									<a
 										href={`https://codespaces.new/${repoMatch![1]}/${repoMatch![2]}`}
 										target='_blank'
@@ -417,7 +421,7 @@ function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
 										Open fork in Codespaces ↗
 									</a>
 									<a
-										href={`https://vercel.com/new/git/external?repository-url=${encodeURIComponent(repoUrl)}`}
+										href='https://vercel.com/new'
 										target='_blank'
 										rel='noopener noreferrer'
 									>

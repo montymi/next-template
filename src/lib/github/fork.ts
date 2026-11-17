@@ -136,6 +136,6 @@ export async function createConfiguredFork(
 	return {
 		repository,
 		commit: `${repository}/commit/${saved.sha}`,
-		deploy: `https://vercel.com/new/git/external?repository-url=${encodeURIComponent(repository)}`,
+		deploy: 'https://vercel.com/new',
 	}
 }

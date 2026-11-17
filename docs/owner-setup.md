@@ -20,6 +20,14 @@ npm run github:setup -- https://template.montymi.com
 
 Enter the Client ID and generated client secret in the terminal. The secret is hidden; it is never printed. The command creates a random session key and writes a Git-ignored `.env.local` with private file permissions. Keep credentials out of chat and Git.
 
+## Connect the existing repository to Vercel
+
+Open https://vercel.com/new. Under **Import Git Repository**, find **montymi/next-template** and click **Import**. Choose the Next.js framework and deploy with **main** as the production branch. This creates a Vercel project connected to the existing GitHub repository. Subsequent pushes to main deploy automatically.
+
+If the Vercel project already exists, use its **Settings → Git** to connect `montymi/next-template`, and check that its production branch tracks `main`. Grant Vercel’s GitHub integration access to this repository if it is missing from the import list. Add `template.montymi.com` under the project’s Domains settings.
+
+Use the repository list on the New Project page. The external-repository clone wizard creates another GitHub repository and is not the import flow described here.
+
 ## Enable on the hosting project
 
 Set these values in the hosting project’s environment settings:

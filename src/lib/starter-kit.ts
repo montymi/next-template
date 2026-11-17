@@ -86,7 +86,7 @@ export async function starterKit(
 	if (brand.avatar)
 		files['public/brand/avatar.png'] = await icon(brand.avatar, 512)
 	files['START-HERE.md'] = strToU8(
-		'# Your starter\n\n1. Fork https://github.com/montymi/next-template/fork and clone your fork (or open it in Codespaces).\n2. Run npm ci, then npm run customize -- /path/to/coast-starter.zip.\n3. Run npm run dev to review. Follow PERSONALIZE.md with a coding agent if included.\n4. Commit and push your changes, then import YOUR fork at https://vercel.com/new.\n\nThe downloaded kit is local to your device. GitHub and Vercel do not receive these settings until you apply and push them.\n',
+		'# Your starter\n\n1. Fork https://github.com/montymi/next-template/fork and clone your fork (or open it in Codespaces).\n2. Run npm ci, then npm run customize -- /path/to/coast-starter.zip.\n3. Run npm run dev to review. Follow PERSONALIZE.md with a coding agent if included.\n4. Commit and push your changes, then open https://vercel.com/new and select YOUR existing fork from Import Git Repository. Keep main as the production branch.\n\nThe downloaded kit is local to your device. GitHub and Vercel do not receive these settings until you apply and push them.\n',
 	)
 	if (resume.trim())
 		files['PERSONALIZE.md'] = strToU8(

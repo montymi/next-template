@@ -203,10 +203,7 @@ test('public starter kit carries identity, artwork, resume, and tokens into a fo
 		.fill('https://github.com/alex/portfolio')
 	await expect(
 		page.getByRole('link', { name: /Deploy your fork/ }),
-	).toHaveAttribute(
-		'href',
-		/repository-url=https%3A%2F%2Fgithub.com%2Falex%2Fportfolio/,
-	)
+	).toHaveAttribute('href', 'https://vercel.com/new')
 	await page.getByText('Download or export', { exact: true }).click()
 	const downloadEvent = page.waitForEvent('download')
 	await page
@@ -287,8 +284,7 @@ test.describe('Configured GitHub handoff', () => {
 				json: {
 					repository: 'https://github.com/alex/personal-site',
 					commit: 'https://github.com/alex/personal-site/commit/abc',
-					deploy:
-						'https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Falex%2Fpersonal-site',
+					deploy: 'https://vercel.com/new',
 				},
 			})
 		})
@@ -337,6 +333,15 @@ test.describe('Configured GitHub handoff', () => {
 		await expect(
 			page.getByRole('link', { name: 'Open my repository', exact: true }),
 		).toHaveAttribute('href', 'https://github.com/alex/personal-site')
+		await expect(
+			page.getByRole('link', { name: 'Deploy on Vercel ↗' }),
+		).toHaveAttribute('href', 'https://vercel.com/new')
+		await expect(
+			page.getByText(
+				'In Vercel, choose Import Git Repository and select alex/personal-site.',
+				{ exact: true },
+			),
+		).toBeVisible()
 		const snapshot = submitted?.snapshot as {
 			tokens: { light: { primary: string } }
 			brand: { name: string; logo: string }

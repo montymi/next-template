@@ -80,7 +80,7 @@ Husky runs lint on commit and the full test command on push. Conventional Commit
 
 ## Deployment
 
-Vercel can import this repository with its standard Next.js preset. `vercel.json` uses a clean npm install and the production build. Set the optional `NEXT_PUBLIC_SITE_URL` to your canonical HTTPS origin when using a custom domain. Vercel’s environment hostname is used when this variable is absent. The site and local customization work without credentials. Automatic configured forks require the GitHub OAuth settings below.
+Open https://vercel.com/new and choose `montymi/next-template` from **Import Git Repository**. Use the standard Next.js preset and **main** as the production branch. This connects the existing GitHub repository to Vercel; future pushes to main deploy automatically. For an existing Vercel project, connect the repository through its Git settings. `vercel.json` uses a clean npm install and the production build. Set the optional `NEXT_PUBLIC_SITE_URL` to your canonical HTTPS origin when using a custom domain. Vercel’s environment hostname is used when this variable is absent. The site and local customization work without credentials. Automatic configured forks require the GitHub OAuth settings below.
 
 For a Node host:
 
@@ -116,7 +116,7 @@ The homepage opens the configurator. There is one fork action inside it:
 2. Click **Continue with GitHub**. The latest preview is saved in IndexedDB automatically before sign-in. Artwork survives the redirect. The proposed repository name comes from your site name; **Repository options** lets you change it and retains that choice through sign-in.
 3. Authorize the site on GitHub. You return to the same editor with your configuration intact.
 4. Click **Create my fork**. Any final edits are saved automatically, then the server creates a fork in your account and applies the configuration in one commit. No source-repository changes are made.
-5. Open your repository or deploy it on Vercel. Its build regenerates matching favicon, Apple, PWA/maskable, and social assets.
+5. Open your repository or follow the Vercel link, then select that existing repository under **Import Git Repository**. Its build regenerates matching favicon, Apple, PWA/maskable, and social assets.
 
 Returning visitors who are already connected can go directly from editing to **Create my fork**. There is no separate save requirement. Downloads, file exports, and developer-only file saves are under **Download or export**. Missing credentials produce an explicit unavailable state and a local-save fallback.
 

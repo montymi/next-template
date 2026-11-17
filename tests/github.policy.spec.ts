@@ -64,6 +64,7 @@ test('a new fork receives one atomic commit containing the saved configuration',
 	)
 	expect(created).toBe(true)
 	expect(result.repository).toBe('https://github.com/alex/personal-site')
+	expect(result.deploy).toBe('https://vercel.com/new')
 	expect(blobs.join('\n')).toContain('#205A79')
 	expect(blobs.join('\n')).toContain('--primary: #205a79;')
 	expect(blobs.join('\n')).toContain('https://github.com/alex/personal-site')
