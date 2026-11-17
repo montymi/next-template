@@ -73,7 +73,7 @@ test('component examples have working buttons, dialog, and local form', async ({
 	await page.keyboard.press('Escape')
 	await expect(page.getByRole('dialog')).not.toBeVisible()
 	await page.getByText('Can I make this my own?', { exact: true }).click()
-	await expect(page.locator('details')).toHaveAttribute('open', '')
+	await expect(page.locator('.accordion')).toHaveAttribute('open', '')
 	await page.getByRole('button', { name: 'Save example' }).click()
 	expect(
 		await page
@@ -173,7 +173,6 @@ test('visited public page works offline after worker control', async ({
 
 test('public starter kit carries identity, artwork, resume, and tokens into a fork', async ({
 	page,
-	context,
 }) => {
 	const { readFile, mkdtemp, rm } = await import('node:fs/promises')
 	const { tmpdir } = await import('node:os')
@@ -198,6 +197,7 @@ test('public starter kit carries identity, artwork, resume, and tokens into a fo
 	await page
 		.getByRole('textbox', { name: 'Resume text', exact: true })
 		.fill('Alex Rivera — designer. Built accessible websites.')
+	await page.getByText('Downloads & deployment tools', { exact: true }).click()
 	await page
 		.getByRole('textbox', { name: 'Your fork URL', exact: true })
 		.fill('https://github.com/alex/portfolio')
@@ -207,16 +207,10 @@ test('public starter kit carries identity, artwork, resume, and tokens into a fo
 		'href',
 		/repository-url=https%3A%2F%2Fgithub.com%2Falex%2Fportfolio/,
 	)
-	await context.route(
-		'https://github.com/montymi/next-template/fork',
-		(route) => route.fulfill({ body: 'GitHub fork handoff' }),
-	)
 	const downloadEvent = page.waitForEvent('download')
-	const popupEvent = page.waitForEvent('popup')
-	await page.getByRole('link', { name: 'Save & fork on GitHub' }).click()
-	const popup = await popupEvent
-	await expect(popup).toHaveURL('https://github.com/montymi/next-template/fork')
-	await popup.close()
+	await page
+		.getByRole('button', { name: 'Download starter kit', exact: true })
+		.click()
 	const download = await downloadEvent
 	expect(download.suggestedFilename()).toBe('coast-starter.zip')
 	const files = unzipSync(
@@ -262,52 +256,135 @@ test('public starter kit carries identity, artwork, resume, and tokens into a fo
 	}
 })
 
-test('homepage forks directly into the visitor’s GitHub account without customization', async ({
-	page,
-	context,
-	isMobile,
-}) => {
-	await context.route(
-		'https://github.com/montymi/next-template/fork',
-		(route) =>
+test.describe('Configured GitHub handoff', () => {
+	test.use({ serviceWorkers: 'block' })
+	test('saved configuration survives GitHub sign-in and is the exact version forked', async ({
+		page,
+	}) => {
+		let connected = false
+		await page.route('**/api/github/status', (route) =>
 			route.fulfill({
-				body: 'GitHub handles account selection and fork creation.',
+				json: { configured: true, connected, login: connected ? 'alex' : null },
 			}),
-	)
+		)
+		await page.route('**/api/github/authorize?**', async (route) => {
+			connected = true
+			await route.fulfill({
+				status: 302,
+				headers: { location: '/?github=connected' },
+				body: '',
+			})
+		})
+		let submitted: Record<string, unknown> | undefined
+		await page.route('**/api/github/fork', (route) => {
+			submitted = route.request().postDataJSON()
+			return route.fulfill({
+				json: {
+					repository: 'https://github.com/alex/personal-site',
+					commit: 'https://github.com/alex/personal-site/commit/abc',
+					deploy:
+						'https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Falex%2Fpersonal-site',
+				},
+			})
+		})
+		await page.goto('/')
+		await expect(page.locator('a[href$="/fork"]')).toHaveCount(0)
+		await page
+			.locator('.hero-actions')
+			.getByRole('button', { name: 'Make it yours' })
+			.click()
+		await page
+			.getByRole('textbox', { name: 'Site name', exact: true })
+			.fill('Alex’s saved site')
+		await page
+			.getByLabel('Logo image', { exact: false })
+			.setInputFiles('public/pwa-192x192.png')
+		await expect(page.locator('.brand-upload')).toBeVisible()
+		await page.getByLabel('Primary hex', { exact: true }).fill('#205A79')
+		await page
+			.getByRole('textbox', { name: 'Resume text', exact: true })
+			.fill('Private resume should never reach GitHub.')
+		await expect(
+			page.getByRole('button', { name: 'Connect GitHub', exact: true }),
+		).toBeDisabled()
+		await page
+			.getByRole('button', { name: 'Save configuration', exact: true })
+			.click()
+		await expect(
+			page
+				.getByRole('status')
+				.filter({ hasText: 'Configuration saved in this browser.' }),
+		).toBeVisible()
+		await page
+			.getByRole('button', { name: 'Connect GitHub', exact: true })
+			.click()
+		await expect(page.getByRole('dialog')).toBeVisible()
+		await expect(
+			page.getByRole('textbox', { name: 'Site name', exact: true }),
+		).toHaveValue('Alex’s saved site')
+		await expect(page.getByLabel('Primary hex', { exact: true })).toHaveValue(
+			'#205A79',
+		)
+		await expect(page.locator('.brand-upload')).toBeVisible()
+		await page.getByLabel('Primary hex', { exact: true }).fill('#224466')
+		await expect(
+			page.getByRole('button', { name: 'Fork saved version', exact: true }),
+		).toBeDisabled()
+		await page
+			.getByRole('button', { name: 'Save configuration', exact: true })
+			.click()
+		await page
+			.getByRole('textbox', { name: 'New repository name' })
+			.fill('personal-site')
+		await page
+			.getByRole('button', { name: 'Fork saved version', exact: true })
+			.click()
+		await expect(
+			page.getByRole('link', { name: 'Open your configured fork ↗' }),
+		).toHaveAttribute('href', 'https://github.com/alex/personal-site')
+		const snapshot = submitted?.snapshot as {
+			tokens: { light: { primary: string } }
+			brand: { name: string; logo: string }
+		}
+		expect(snapshot.tokens.light.primary).toBe('#224466')
+		expect(snapshot.brand.name).toBe('Alex’s saved site')
+		expect(snapshot.brand.logo).toMatch(/^data:image\/png;base64,/)
+		expect(JSON.stringify(submitted)).not.toContain('Private resume')
+		expect(submitted).not.toHaveProperty('resume')
+	})
+})
+test('missing GitHub app is explicit and never silently forks the original', async ({
+	page,
+	request,
+}) => {
 	await page.goto('/')
-	const fork = page
-		.locator('.hero-actions')
-		.getByRole('link', { name: 'Fork on GitHub' })
-	await expect(fork).toBeVisible()
-	await expect(fork).toHaveAttribute(
-		'href',
-		'https://github.com/montymi/next-template/fork',
-	)
-	const popupPromise = page.waitForEvent('popup')
-	await fork.click()
-	const popup = await popupPromise
-	await expect(popup).toHaveURL('https://github.com/montymi/next-template/fork')
-	await popup.close()
-	await expect(page.getByRole('dialog')).not.toBeVisible()
-	if (isMobile) await page.locator('.menu-toggle').click()
+	await page.getByRole('button', { name: /Customize UI/ }).click()
 	await expect(
-		page.locator('.main-nav').getByRole('link', { name: 'Fork on GitHub' }),
+		page.getByText('GitHub sign-in is not enabled on this deployment yet.', {
+			exact: false,
+		}),
 	).toBeVisible()
+	await expect(
+		page.getByRole('button', { name: 'Fork saved version' }),
+	).toHaveCount(0)
+	expect((await request.get('/api/github/authorize')).status()).toBe(503)
 	expect(
-		await page.evaluate(
-			() => document.documentElement.scrollWidth <= innerWidth,
-		),
-	).toBe(true)
-	await page.goto('/es')
-	await expect(
-		page
-			.locator('.hero-actions')
-			.getByRole('link', { name: 'Crear un fork en GitHub' }),
-	).toHaveAttribute('href', 'https://github.com/montymi/next-template/fork')
-	await page.goto('/it')
-	await expect(
-		page
-			.locator('.hero-actions')
-			.getByRole('link', { name: 'Crea un fork su GitHub' }),
-	).toHaveAttribute('href', 'https://github.com/montymi/next-template/fork')
+		(await request.get('/api/github/callback?code=fake&state=fake')).status(),
+	).toBe(503)
+	expect(
+		(
+			await request.post('/api/github/fork', {
+				headers: { Origin: 'https://evil.test' },
+				data: {},
+			})
+		).status(),
+	).toBe(403)
+	expect(
+		(
+			await request.post('/api/github/fork', {
+				headers: { Origin: 'http://localhost:3200' },
+				data: {},
+			})
+		).status(),
+	).toBe(503)
 })

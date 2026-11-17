@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev --webpack",
-		"prebuild": "npm run tokens && npm run messages",
+		"prebuild": "npm run brand && npm run messages",
 		"build": "next build --webpack",
 		"start": "next start",
 		"lint": "eslint src scripts tests next.config.ts playwright.config.ts",
@@ -19,7 +19,8 @@
 		"test:report": "playwright show-report",
 		"brand": "npm run tokens && npm run icons",
 		"messages": "node scripts/validate-messages.mjs",
-		"customize": "node scripts/apply-starter.mjs"
+		"customize": "node scripts/apply-starter.mjs",
+		"predev": "npm run brand"
 	},
 	"dependencies": {
 		"@serwist/next": "9.5.14",

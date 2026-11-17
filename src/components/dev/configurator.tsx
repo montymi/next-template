@@ -1,5 +1,7 @@
 'use client'
-import { GitHubIcon, ForkIcon } from '@/components/ui/github-icons'
+import { GitHubHandoff } from './github-handoff'
+import { validateSnapshot, type Snapshot } from '@/lib/github/snapshot'
+import { readSaved, writeSaved } from '@/lib/github/saved'
 import { useEffect, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
@@ -87,17 +89,45 @@ function ColorField({
 	)
 }
 
-export default function Configurator() {
-	const [tokens, setTokens] = useState<DesignTokens>(initialTokens)
+function Editor({ initialSaved }: { initialSaved: Snapshot | null }) {
+	const [savedSnapshot, setSavedSnapshot] = useState(initialSaved)
+	const [tokens, setTokens] = useState<DesignTokens>(() => {
+		try {
+			const draft = localStorage.getItem(storageKey)
+			if (draft) return validateTokens(JSON.parse(draft))
+		} catch {}
+		return initialSaved?.tokens ?? initialTokens()
+	})
 	const { resolvedTheme, setTheme } = useTheme()
 	const [mode, setMode] = useState<ColorMode>(
 		resolvedTheme === 'dark' ? 'dark' : 'light',
 	)
 	const [status, setStatus] = useState('')
 	const [saving, setSaving] = useState(false)
-	const [brand, setBrand] = useState({ ...brandSource, name: site.name })
+	const [brand, setBrand] = useState(
+		initialSaved?.brand ?? { ...brandSource, name: site.name },
+	)
 	const [resume, setResume] = useState('')
 	const [repo, setRepo] = useState('')
+	const snapshot: Snapshot = { version: 1, tokens, brand }
+	const dirty = JSON.stringify(snapshot) !== JSON.stringify(savedSnapshot)
+	async function saveConfiguration() {
+		setSaving(true)
+		try {
+			const saved = validateSnapshot(snapshot)
+			await writeSaved(saved)
+			setSavedSnapshot(saved)
+			setBrand(saved.brand)
+			setTokens(saved.tokens)
+			setStatus('Configuration saved in this browser. Ready to fork.')
+		} catch {
+			setStatus(
+				'Could not save in this browser. Check storage permissions or use Download starter kit.',
+			)
+		} finally {
+			setSaving(false)
+		}
+	}
 	const isDev = process.env.NODE_ENV === 'development'
 	useEffect(() => publishBrand(brand), [brand])
 	async function upload(file: File | undefined, key: 'logo' | 'avatar') {
@@ -134,6 +164,12 @@ export default function Configurator() {
 		: ''
 	const dialog = useRef<HTMLDialogElement>(null)
 	useEffect(() => {
+		const open = () => dialog.current?.showModal()
+		window.addEventListener('coast:customize', open)
+		if (new URLSearchParams(location.search).has('github')) open()
+		return () => window.removeEventListener('coast:customize', open)
+	}, [])
+	useEffect(() => {
 		publishPreview(tokens)
 		try {
 			localStorage.setItem(storageKey, JSON.stringify(tokens))
@@ -152,6 +188,8 @@ export default function Configurator() {
 	}
 	function reset() {
 		setTokens(structuredClone(source))
+		setBrand({ ...brandSource, name: site.name })
+		setResume('')
 		try {
 			localStorage.removeItem(storageKey)
 		} catch {}
@@ -249,9 +287,9 @@ export default function Configurator() {
 				</header>
 				<div className='config-body'>
 					<p className='config-intro'>
-						Preview your design, download your starter kit, then fork the
-						repository. Apply the kit to your fork before deploying. Your
-						artwork and resume stay in this browser until you download them.
+						Customize your site, save a version, then connect GitHub to create a
+						fork with that version committed. Saving keeps your settings and
+						artwork in this browser. Resumes are excluded from automatic forks.
 					</p>
 					<div className='config-tabs' aria-label='Color mode'>
 						<button
@@ -340,45 +378,49 @@ export default function Configurator() {
 							coding agent. No resume is uploaded or sent to an AI service.
 						</p>
 					</fieldset>
-					<fieldset>
-						<legend>Fork → personalize → deploy</legend>
-						<ol className='config-steps'>
-							<li>Save your kit and fork on GitHub.</li>
-							<li>
-								In your fork: npm ci, then npm run customize --
-								/path/to/coast-starter.zip.
-							</li>
-							<li>Review, commit, and push. Import your fork into Vercel.</li>
-						</ol>
-						<label className='config-label'>
-							Your fork URL
-							<input
-								className='input'
-								type='url'
-								placeholder='https://github.com/you/your-site'
-								value={repo}
-								onChange={(e) => setRepo(e.target.value)}
-							/>
-						</label>
-						{repoUrl && (
-							<div className='config-links'>
-								<a
-									href={`https://codespaces.new/${repoMatch![1]}/${repoMatch![2]}`}
-									target='_blank'
-									rel='noopener noreferrer'
-								>
-									Open fork in Codespaces ↗
-								</a>
-								<a
-									href={`https://vercel.com/new/git/external?repository-url=${encodeURIComponent(repoUrl)}`}
-									target='_blank'
-									rel='noopener noreferrer'
-								>
-									Deploy your fork on Vercel ↗
-								</a>
-							</div>
-						)}
-					</fieldset>
+					<GitHubHandoff saved={savedSnapshot} dirty={dirty} />
+					<details className='export-options'>
+						<summary>Downloads & deployment tools</summary>{' '}
+						<fieldset>
+							<legend>Fork → personalize → deploy</legend>
+							<ol className='config-steps'>
+								<li>Save your kit and fork on GitHub.</li>
+								<li>
+									In your fork: npm ci, then npm run customize --
+									/path/to/coast-starter.zip.
+								</li>
+								<li>Review, commit, and push. Import your fork into Vercel.</li>
+							</ol>
+							<label className='config-label'>
+								Your fork URL
+								<input
+									className='input'
+									type='url'
+									placeholder='https://github.com/you/your-site'
+									value={repo}
+									onChange={(e) => setRepo(e.target.value)}
+								/>
+							</label>
+							{repoUrl && (
+								<div className='config-links'>
+									<a
+										href={`https://codespaces.new/${repoMatch![1]}/${repoMatch![2]}`}
+										target='_blank'
+										rel='noopener noreferrer'
+									>
+										Open fork in Codespaces ↗
+									</a>
+									<a
+										href={`https://vercel.com/new/git/external?repository-url=${encodeURIComponent(repoUrl)}`}
+										target='_blank'
+										rel='noopener noreferrer'
+									>
+										Deploy your fork on Vercel ↗
+									</a>
+								</div>
+							)}
+						</fieldset>
+					</details>
 					<fieldset>
 						<legend>Colors</legend>
 						<div className='config-colors'>
@@ -466,17 +508,9 @@ export default function Configurator() {
 					</fieldset>
 				</div>
 				<div className='config-actions'>
-					<a
-						className='button button--primary'
-						href={`${site.repository}/fork`}
-						target='_blank'
-						rel='noopener noreferrer'
-						onClick={() => void exportKit()}
-					>
-						<GitHubIcon />
-						Save &amp; fork on GitHub
-						<ForkIcon />
-					</a>
+					<Button disabled={saving} onClick={() => void saveConfiguration()}>
+						{saving ? 'Saving…' : 'Save configuration'}
+					</Button>
 					{isDev && (
 						<Button disabled={saving} onClick={() => void save()}>
 							Save tokens locally
@@ -505,4 +539,24 @@ export default function Configurator() {
 			</dialog>
 		</>
 	)
+}
+
+export default function Configurator() {
+	const [loaded, setLoaded] = useState<{ snapshot: Snapshot | null } | null>(
+		null,
+	)
+	useEffect(() => {
+		let active = true
+		readSaved()
+			.then((snapshot) => {
+				if (active) setLoaded({ snapshot })
+			})
+			.catch(() => {
+				if (active) setLoaded({ snapshot: null })
+			})
+		return () => {
+			active = false
+		}
+	}, [])
+	return loaded ? <Editor initialSaved={loaded.snapshot} /> : null
 }

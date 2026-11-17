@@ -13,7 +13,7 @@ export async function readArtwork(file: File): Promise<string> {
 		if (bitmap.width > 4096 || bitmap.height > 4096)
 			throw Error('Use an image at most 4096 × 4096 pixels.')
 		const canvas = document.createElement('canvas')
-		const ratio = Math.min(1, 1024 / Math.max(bitmap.width, bitmap.height))
+		const ratio = Math.min(1, 512 / Math.max(bitmap.width, bitmap.height))
 		canvas.width = Math.max(1, Math.round(bitmap.width * ratio))
 		canvas.height = Math.max(1, Math.round(bitmap.height * ratio))
 		canvas

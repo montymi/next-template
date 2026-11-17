@@ -40,7 +40,7 @@
 		"ctaText": "Cambia el nombre, elige los colores y construye aquello que solo tú puedes crear.",
 		"ctaAction": "Primeros pasos",
 		"fork": "Crear un fork en GitHub",
-		"forkNote": "Crea una copia en tu cuenta de GitHub. Puede que GitHub te pida iniciar sesión."
+		"forkNote": "Guarda tu configuración y crea un fork en GitHub con esa versión."
 	},
 	"System": {
 		"eyebrow": "EL SISTEMA DE DISEÑO",

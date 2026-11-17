@@ -1,5 +1,12 @@
+import os from 'node:os'
+import path from 'node:path'
 import { createRequire } from 'node:module'
 import { readFile, writeFile, mkdir } from 'node:fs/promises'
+if (!process.env.XDG_CACHE_HOME) {
+	const cache = path.join(os.tmpdir(), 'coast-asset-cache')
+	await mkdir(cache, { recursive: true })
+	process.env.XDG_CACHE_HOME = cache
+}
 const require = createRequire(import.meta.url)
 const sharp = createRequire(require.resolve('next/package.json'))('sharp')
 const site = JSON.parse(await readFile('src/config/site.json', 'utf8'))

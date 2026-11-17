@@ -28,11 +28,12 @@ Click **Customize UI** on the hosted site or while running `npm run dev`.
 - Edit all light and dark colors with a picker or a six-digit hex value.
 - Select display and body fonts, adjust the spacing scale, and change corner radii.
 - Preview changes immediately across components and the design-system samples. A local browser draft survives reloads.
-- **Save tokens locally** writes `src/design-system/tokens.json` and regenerates `src/styles/tokens.css`. Next.js refreshes the page. The project directory must be writable.
+- **Save configuration** stores a complete version (tokens, name, logo, avatar) in this browser. After connecting GitHub, **Fork saved version** creates your fork and commits that saved version. Unsaved changes must be saved first.
+- **Save tokens locally** (development only) writes `src/design-system/tokens.json` and regenerates `src/styles/tokens.css`. Next.js refreshes the page. The project directory must be writable.
 - **Download JSON** and **Copy JSON** export the draft. Replace the token JSON with an export and run `npm run brand` to apply it and refresh icons.
 - **Reset preview** restores the current project tokens. It does not undo an already saved change; use Git to restore an earlier version.
 
-The public editor exports a starter kit and opens GitHub’s fork page. **Save tokens locally** is available only in development. The `/api/dev/tokens` endpoint returns **404 in production**, including token reads. Development writes require a same-origin JSON request and a validated document of at most 32 KiB. Fonts are limited to bundled and system fonts.
+The public editor creates a fork containing the saved configuration through GitHub sign-in when the OAuth app is configured. Download starter kit remains a manual fallback. **Save tokens locally** is available only in development. The `/api/dev/tokens` endpoint returns **404 in production**, including token reads. Development writes require a same-origin JSON request and a validated document of at most 32 KiB. Fonts are limited to bundled and system fonts.
 
 Saving updates live UI tokens. Run `npm run brand` after choosing a final palette to update installed app icons, manifests, and the social image. Previously installed apps may retain icons until their next browser update.
 
@@ -54,7 +55,7 @@ npm run brand     # Regenerate tokens + brand assets after editing their sources
 npm run messages  # Verify all locales have matching, nonempty translation keys
 ```
 
-Generated `tokens.css` is committed for immediate development startup. Edit its JSON source rather than the CSS file. The build regenerates tokens and checks translations. Local fonts and their licenses are included; runtime font downloads are unnecessary.
+Generated `tokens.css` is committed for immediate development startup. Edit its JSON source rather than the CSS file. Development startup and the build regenerate tokens, icons, manifests, and the social image; the build also checks translations. Local fonts and their licenses are included; runtime font downloads are unnecessary.
 
 ## Languages and themes
 
@@ -79,7 +80,7 @@ Husky runs lint on commit and the full test command on push. Conventional Commit
 
 ## Deployment
 
-Vercel can import this repository with its standard Next.js preset. `vercel.json` uses a clean npm install and the production build. Set the optional `NEXT_PUBLIC_SITE_URL` to your canonical HTTPS origin when using a custom domain. Vercel’s environment hostname is used when this variable is absent. No credentials are needed for the starter.
+Vercel can import this repository with its standard Next.js preset. `vercel.json` uses a clean npm install and the production build. Set the optional `NEXT_PUBLIC_SITE_URL` to your canonical HTTPS origin when using a custom domain. Vercel’s environment hostname is used when this variable is absent. The site and local customization work without credentials. Automatic configured forks require the GitHub OAuth settings below.
 
 For a Node host:
 
@@ -89,7 +90,7 @@ npm run build
 npm run start -- --hostname 0.0.0.0 --port 3000
 ```
 
-Use a single build before starting the production server. The public configurator exports settings locally; production cannot write to the project filesystem.
+Use a single build before starting the production server. The public configurator saves versions in browser storage and commits them to the visitor’s own GitHub fork; production cannot write to the deployed project filesystem.
 
 ## App services and offline behavior
 
@@ -107,16 +108,39 @@ If you own the repository, enable **Settings → General → Template repository
 
 MIT; see [LICENSE.txt](LICENSE.txt). Bundled font licenses are in `public/fonts/`.
 
-## Public customization and GitHub handoff
+## Saved versions → GitHub forks
 
-The configurator is now available on production deployments. **Save & fork on GitHub** opens GitHub's fork page and downloads `coast-starter.zip`. Download and fork are separate actions: settings are never silently committed to a GitHub repository.
+The homepage opens the configurator. There is one fork action inside it:
 
-In the fork, run `npm ci`, then `npm run customize -- /path/to/coast-starter.zip`. This validates the archive, applies tokens, site name, logo, and avatar, and generates the favicon (ICO/SVG), Apple icon, PWA/maskable icons, and social image from your logo. Review, commit, and push, then import your fork into Vercel. Enter your fork URL in the editor for direct Codespaces and Vercel import links. Forking works without GitHub's template flag.
+1. Customize the colors, type, spacing, name, logo, and avatar.
+2. **Save configuration** stores a validated snapshot in IndexedDB. This includes artwork and survives GitHub’s sign-in redirect. Changing any setting disables forking until the new version is saved.
+3. **Connect GitHub** authorizes the visitor’s account, then returns to the editor with the saved configuration intact.
+4. Choose a new repository name and click **Fork saved version**. The server creates a fork in that account and applies the saved JSON, CSS, logo, and avatar in one commit. No source-repository changes are made.
+5. Open the resulting repository, review its commit, or deploy that fork on Vercel. Its build regenerates matching favicon, Apple, PWA/maskable, and social assets.
 
-Artwork accepts PNG/JPEG/WebP under 2 MB, with a 4096-pixel dimension limit, and is rasterized locally. Artwork is held in memory; choose it again after refreshing. Optional resumes accept pasted text or `.txt`/`.md` files and produce a `PERSONALIZE.md` brief for your chosen coding agent. No AI API is invoked. The resume is not persisted to browser storage or uploaded; it is included only in the downloaded kit. The brief is excluded from Git by default. PDF parsing and automatic agent execution are not included.
+Existing repositories are rejected. A receipt permits retrying a partially completed fork only for the same account, repository, and saved configuration. Branch updates are never forced. Resume text is excluded from automatic forks and saved snapshots. It can be included explicitly in a downloaded kit’s local `PERSONALIZE.md` brief for a coding agent; that file is ignored by Git. No AI service runs automatically.
 
-The local file-save endpoint remains development-only; production always returns 404. Public Save exports a kit and opens GitHub. No production file writes or GitHub tokens are needed. A tighter automatic commit/PR flow would require a GitHub App with installation permissions; it is not simulated here.
+### Enable GitHub sign-in on a deployment
 
-### Fork directly from the site
+Create a GitHub OAuth app under **GitHub Settings → Developer settings → OAuth Apps**. Set its Homepage URL to your site and Authorization callback URL to `https://YOUR-DOMAIN/api/github/callback`. Configure these **server-only** environment variables on Vercel or your Node host, then redeploy:
 
-The homepage's primary **Fork on GitHub** action and the navigation link open GitHub's native `/fork` screen. Visitors sign in to their own GitHub account if needed, choose an owner and repository name, and create their copy. No configurator, resume, or kit download is required. The separate customization flow remains available when someone wants to carry their preview settings into their fork. Fork links are translated in English, Spanish, and Italian.
+```dotenv
+GITHUB_CLIENT_ID=your-oauth-app-client-id
+GITHUB_CLIENT_SECRET=your-oauth-app-client-secret
+GITHUB_SESSION_SECRET=a-random-secret-of-at-least-32-characters
+GITHUB_CALLBACK_URL=https://YOUR-DOMAIN/api/github/callback
+```
+
+Generate the session secret with `openssl rand -hex 32`. Never put these credentials in public environment variables or commit them. The OAuth flow requests `public_repo` access, which permits management of public repositories; it does not request private-repository scope. Users approve this on GitHub. A GitHub App with narrower per-repository installation permissions is a possible future replacement.
+
+OAuth uses state and PKCE. Access tokens stay in encrypted, HttpOnly, SameSite cookies with a 30-minute session. They are never returned to client JavaScript. **Disconnect GitHub** clears this site’s session; users can also revoke the app under GitHub’s Authorized OAuth Apps. The API accepts same-origin writes only. Missing credentials produce an explicit unavailable state; the site never silently forks the unconfigured source instead.
+
+For local OAuth development, create a separate OAuth app with callback `http://localhost:3000/api/github/callback`, set matching variables in `.env.local`, and run the development server. Production callbacks require HTTPS. Fork creation uses GitHub’s REST API, so the hosting network must allow `github.com` and `api.github.com`.
+
+Tests cover client redirect recovery and exact saved-snapshot submission with intercepted responses, and server commit creation, ownership, conflict handling, and encrypted-session validation with mocked GitHub calls. A live OAuth authorization and real fork require a configured app and account; they are not claimed by those tests.
+
+### Downloads and manual fallback
+
+**Download starter kit** exports the current preview. In a manually created fork run `npm ci`, then `npm run customize -- /path/to/coast-starter.zip`. This validates the archive, applies the configuration, and regenerates brand assets. Advanced deployment tools accept an existing fork URL for Codespaces and Vercel links. The download workflow does not automatically commit to GitHub.
+
+Artwork accepts PNG/JPEG/WebP under 2 MB, at most 4096 pixels per dimension. It is rasterized and reduced to 512 pixels before saving. Saved versions persist artwork in this browser; unsaved artwork is lost on refresh. The optional resume stays in memory and is never sent by automatic fork creation. PDF parsing is not included.

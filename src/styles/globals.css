@@ -1278,3 +1278,34 @@ dialog::backdrop {
 		padding: 12px;
 	}
 }
+.github-handoff {
+	padding-top: 20px !important;
+	border-top: 1px solid var(--border) !important;
+}
+.github-handoff .button {
+	gap: 8px;
+	margin-top: 12px;
+}
+.github-handoff .config-label {
+	margin-top: 14px;
+}
+.github-handoff .form-hint + .form-hint {
+	margin-top: 10px;
+}
+.github-handoff .config-links {
+	margin-top: 20px;
+}
+.handoff-unavailable {
+	margin-top: 12px;
+	padding: 14px;
+	background: var(--surface-alt);
+	border-radius: var(--radius-small);
+	font-size: 12px;
+}
+.export-options {
+	margin-bottom: 24px;
+	font-size: 12px;
+}
+.export-options > summary {
+	margin-bottom: 16px;
+}

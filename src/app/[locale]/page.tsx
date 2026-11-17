@@ -1,9 +1,7 @@
-import { GitHubIcon, ForkIcon } from '@/components/ui/github-icons'
+import { OpenConfigurator } from '@/components/ui/open-configurator'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { buttonClass } from '@/components/ui/button'
 import { Arrow } from '@/components/ui/arrow'
-import site from '@/config/site.json'
 import { ArchitectureStudy } from '@/components/site/study'
 
 export default async function Home({
@@ -29,16 +27,10 @@ export default async function Home({
 					</h1>
 					<p className='hero-description'>{t('description')}</p>
 					<div className='hero-actions'>
-						<a
-							className={buttonClass()}
-							href={`${site.repository}/fork`}
-							target='_blank'
-							rel='noopener noreferrer'
-						>
-							<GitHubIcon />
-							{t('fork')}
-							<ForkIcon />
-						</a>
+						<OpenConfigurator>
+							{t('secondary')}
+							<Arrow />
+						</OpenConfigurator>
 						<Link className='text-link' href='/design-system'>
 							{t('primary')}
 							<Arrow />

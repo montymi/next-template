@@ -1,5 +1,4 @@
 'use client'
-import { GitHubIcon, ForkIcon } from '@/components/ui/github-icons'
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
@@ -41,17 +40,6 @@ function HeaderContent() {
 						{t(key)}
 					</Link>
 				))}
-				<a
-					className='nav-fork'
-					href={`${site.repository}/fork`}
-					target='_blank'
-					rel='noopener noreferrer'
-					onClick={() => setOpen(false)}
-				>
-					<GitHubIcon />
-					{t('fork')}
-					<ForkIcon />
-				</a>
 			</nav>
 			<div className='header-tools'>
 				<BrandAvatar />
