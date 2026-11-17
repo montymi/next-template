@@ -60,7 +60,7 @@ test('save writes the validated project JSON and regenerates CSS', async ({
 	await page.getByRole('button', { name: /Customize UI/ }).click()
 	await page.getByRole('button', { name: 'Reset preview' }).click()
 	await page
-		.getByRole('button', { name: 'Save to project', exact: true })
+		.getByRole('button', { name: 'Save tokens locally', exact: true })
 		.click()
 	await expect(
 		page

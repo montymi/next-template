@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import site from '@/config/site.json'
-import { Mark } from './mark'
+import { BrandMark, BrandName, BrandAvatar } from './brand-preview'
 import { ThemeToggle } from './theme-toggle'
 import { LocaleSwitcher } from './locale-switcher'
 
@@ -18,8 +18,8 @@ function HeaderContent() {
 				className='brand'
 				aria-label={`${site.name}, ${t('overview')}`}
 			>
-				<Mark />
-				<span>{site.name}</span>
+				<BrandMark />
+				<BrandName />
 			</Link>
 			<nav
 				className={`main-nav ${open ? 'is-open' : ''}`}
@@ -42,6 +42,7 @@ function HeaderContent() {
 				))}
 			</nav>
 			<div className='header-tools'>
+				<BrandAvatar />
 				<LocaleSwitcher />
 				<ThemeToggle />
 				<button

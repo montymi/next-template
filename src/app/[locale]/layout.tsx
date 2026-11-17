@@ -85,7 +85,7 @@ export default async function LocaleLayout({
 						<SiteHeader />
 						<main id='main-content'>{children}</main>
 						<SiteFooter />
-						{process.env.NODE_ENV === 'development' && <DevTools />}
+						<DevTools />
 					</Providers>
 				</NextIntlClientProvider>
 			</body>

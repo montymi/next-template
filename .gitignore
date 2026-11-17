@@ -56,3 +56,8 @@ worker-*.js.map
 
 # Non-secret configuration example
 !.env.example
+
+# Local personalization brief may contain private resume data
+/PERSONALIZE.md
+/START-HERE.md
+*.zip

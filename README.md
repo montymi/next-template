@@ -21,18 +21,18 @@ npm run dev -- --hostname 0.0.0.0 --port 3002
 
 For a hosted preview, import your copy into Vercel. A remote workspace’s loopback address is accessible only inside that workspace; use its forwarded URL when viewing from another device.
 
-## Customize in development
+## Customize your site
 
-Click **Customize UI · DEV** while running `npm run dev`.
+Click **Customize UI** on the hosted site or while running `npm run dev`.
 
 - Edit all light and dark colors with a picker or a six-digit hex value.
 - Select display and body fonts, adjust the spacing scale, and change corner radii.
 - Preview changes immediately across components and the design-system samples. A local browser draft survives reloads.
-- **Save to project** writes `src/design-system/tokens.json` and regenerates `src/styles/tokens.css`. Next.js refreshes the page. The project directory must be writable.
+- **Save tokens locally** writes `src/design-system/tokens.json` and regenerates `src/styles/tokens.css`. Next.js refreshes the page. The project directory must be writable.
 - **Download JSON** and **Copy JSON** export the draft. Replace the token JSON with an export and run `npm run brand` to apply it and refresh icons.
 - **Reset preview** restores the current project tokens. It does not undo an already saved change; use Git to restore an earlier version.
 
-The configurator is mounted only in development. The `/api/dev/tokens` endpoint returns **404 in production**, including token reads. Development writes require a same-origin JSON request and a validated document of at most 32 KiB. Paths cannot be supplied by the browser. Fonts are limited to bundled and system fonts; add new choices deliberately in `src/design-system/format.mjs`.
+The public editor exports a starter kit and opens GitHub’s fork page. **Save tokens locally** is available only in development. The `/api/dev/tokens` endpoint returns **404 in production**, including token reads. Development writes require a same-origin JSON request and a validated document of at most 32 KiB. Fonts are limited to bundled and system fonts.
 
 Saving updates live UI tokens. Run `npm run brand` after choosing a final palette to update installed app icons, manifests, and the social image. Previously installed apps may retain icons until their next browser update.
 
@@ -89,7 +89,7 @@ npm run build
 npm run start -- --hostname 0.0.0.0 --port 3000
 ```
 
-Use a single build before starting the production server. The configurator is a local development tool and is unavailable on a production deployment.
+Use a single build before starting the production server. The public configurator exports settings locally; production cannot write to the project filesystem.
 
 ## App services and offline behavior
 
@@ -106,3 +106,13 @@ If you own the repository, enable **Settings → General → Template repository
 ## License
 
 MIT; see [LICENSE.txt](LICENSE.txt). Bundled font licenses are in `public/fonts/`.
+
+## Public customization and GitHub handoff
+
+The configurator is now available on production deployments. **Save & fork on GitHub** opens GitHub's fork page and downloads `coast-starter.zip`. Download and fork are separate actions: settings are never silently committed to a GitHub repository.
+
+In the fork, run `npm ci`, then `npm run customize -- /path/to/coast-starter.zip`. This validates the archive, applies tokens, site name, logo, and avatar, and generates the favicon (ICO/SVG), Apple icon, PWA/maskable icons, and social image from your logo. Review, commit, and push, then import your fork into Vercel. Enter your fork URL in the editor for direct Codespaces and Vercel import links. Forking works without GitHub's template flag.
+
+Artwork accepts PNG/JPEG/WebP under 2 MB, with a 4096-pixel dimension limit, and is rasterized locally. Artwork is held in memory; choose it again after refreshing. Optional resumes accept pasted text or `.txt`/`.md` files and produce a `PERSONALIZE.md` brief for your chosen coding agent. No AI API is invoked. The resume is not persisted to browser storage or uploaded; it is included only in the downloaded kit. The brief is excluded from Git by default. PDF parsing and automatic agent execution are not included.
+
+The local file-save endpoint remains development-only; production always returns 404. Public Save exports a kit and opens GitHub. No production file writes or GitHub tokens are needed. A tighter automatic commit/PR flow would require a GitHub App with installation permissions; it is not simulated here.

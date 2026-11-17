@@ -7,6 +7,15 @@ const tokens = JSON.parse(
 	await readFile('src/design-system/tokens.json', 'utf8'),
 )
 const { primary, primaryText, accent } = tokens.light
+const brand = JSON.parse(await readFile('src/config/brand.json', 'utf8'))
+let logoBuffer
+if (brand.logo) {
+	if (brand.logo !== '/brand/logo.png') throw Error('Invalid logo path.')
+	logoBuffer = await readFile('public/brand/logo.png')
+}
+const imageLayer = logoBuffer
+	? `<image href="data:image/png;base64,${logoBuffer.toString('base64')}" x="8" y="8" width="48" height="48" preserveAspectRatio="xMidYMid meet"/>`
+	: ''
 const escape = (value) =>
 	value.replace(
 		/[&<>"']/g,
@@ -21,8 +30,12 @@ const escape = (value) =>
 	)
 // Replace these neutral sail shapes with your own artwork, then run npm run brand.
 const shapes = `<path d="M5 32 19 5v27H5Z" fill="${primaryText}"/><path d="M23 32V11a22 22 0 0 1 13 21H23Z" fill="${primaryText}" opacity=".65"/><path d="M4 36h32" stroke="${primaryText}" stroke-width="1.2"/>`
-const icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${primary}"/><g transform="translate(12 10)">${shapes}</g></svg>`
-const maskable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="${primary}" d="M0 0h64v64H0z"/><g transform="translate(16 14) scale(.8)">${shapes}</g></svg>`
+let icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${primary}"/><g transform="translate(12 10)">${shapes}</g></svg>`
+let maskable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="${primary}" d="M0 0h64v64H0z"/><g transform="translate(16 14) scale(.8)">${shapes}</g></svg>`
+if (imageLayer) {
+	icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="${primary}"/>${imageLayer}</svg>`
+	maskable = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path fill="${primary}" d="M0 0h64v64H0z"/><g transform="translate(8 8) scale(.75)">${imageLayer}</g></svg>`
+}
 const render = (svg, size) =>
 	sharp(Buffer.from(svg)).resize(size, size).png().toBuffer()
 await mkdir('public/manifests', { recursive: true })
@@ -51,7 +64,12 @@ for (let index = 0; index < images.length; index++) {
 	offset += images[index].length
 }
 await writeFile('public/favicon.ico', Buffer.concat([header, ...images]))
-const social = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="${tokens.light.background}"/><path d="M70 90h1060M70 540h1060" stroke="${tokens.light.border}"/><text x="76" y="312" font-family="Georgia,serif" font-size="132" fill="${primary}">${escape(site.name)}</text><text x="80" y="376" font-family="sans-serif" font-size="24" fill="${tokens.light.muted}">SPACE FOR WHAT’S NEXT.</text><rect x="800" y="156" width="260" height="320" rx="130" fill="${primary}"/><path d="M916 476V290l190-140v326Z" fill="${tokens.light.surfaceAlt}"/><circle cx="1070" cy="164" r="40" fill="${accent}"/></svg>`
+let social = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="${tokens.light.background}"/><path d="M70 90h1060M70 540h1060" stroke="${tokens.light.border}"/><text x="76" y="312" font-family="Georgia,serif" font-size="132" fill="${primary}">${escape(site.name)}</text><text x="80" y="376" font-family="sans-serif" font-size="24" fill="${tokens.light.muted}">SPACE FOR WHAT’S NEXT.</text><rect x="800" y="156" width="260" height="320" rx="130" fill="${primary}"/><path d="M916 476V290l190-140v326Z" fill="${tokens.light.surfaceAlt}"/><circle cx="1070" cy="164" r="40" fill="${accent}"/></svg>`
+if (logoBuffer)
+	social = social.replace(
+		'</svg>',
+		`<image href="data:image/png;base64,${logoBuffer.toString('base64')}" x="820" y="200" width="240" height="240" preserveAspectRatio="xMidYMid meet"/></svg>`,
+	)
 await writeFile(
 	'public/social-card.png',
 	await sharp(Buffer.from(social)).png().toBuffer(),

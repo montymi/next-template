@@ -127,14 +127,12 @@ test('guide, branded 404, icons, and localized manifest are usable', async ({
 	])
 		expect((await request.get(file)).status()).toBe(200)
 })
-test('production has no editor and rejects token reads and writes', async ({
+test('production offers customization and rejects project file writes', async ({
 	page,
 	request,
 }) => {
 	await page.goto('/')
-	await expect(page.getByRole('button', { name: /Customize UI/ })).toHaveCount(
-		0,
-	)
+	await expect(page.getByRole('button', { name: /Customize UI/ })).toBeVisible()
 	expect((await request.get('/api/dev/tokens')).status()).toBe(404)
 	expect(
 		(
@@ -171,4 +169,95 @@ test('visited public page works offline after worker control', async ({
 		'Space for',
 	)
 	await context.setOffline(false)
+})
+
+test('public starter kit carries identity, artwork, resume, and tokens into a fork', async ({
+	page,
+	context,
+}) => {
+	const { readFile, mkdtemp, rm } = await import('node:fs/promises')
+	const { tmpdir } = await import('node:os')
+	const path = await import('node:path')
+	const { unzipSync, strFromU8 } = await import('fflate')
+	const { applyKit } = await import('../scripts/apply-starter.mjs')
+	await page.goto('/')
+	await page.getByRole('button', { name: /Customize UI/ }).click()
+	await page
+		.getByRole('textbox', { name: 'Site name', exact: true })
+		.fill('Alex Rivera')
+	await page
+		.getByLabel('Logo image', { exact: false })
+		.setInputFiles('public/pwa-192x192.png')
+	await expect(
+		page.getByRole('status').filter({ hasText: 'Artwork ready.' }),
+	).toBeVisible()
+	await page
+		.getByLabel('Avatar image', { exact: false })
+		.setInputFiles('public/apple-touch-icon.png')
+	await expect(page.locator('.brand-avatar')).toBeVisible()
+	await page
+		.getByRole('textbox', { name: 'Resume text', exact: true })
+		.fill('Alex Rivera — designer. Built accessible websites.')
+	await page
+		.getByRole('textbox', { name: 'Your fork URL', exact: true })
+		.fill('https://github.com/alex/portfolio')
+	await expect(
+		page.getByRole('link', { name: /Deploy your fork/ }),
+	).toHaveAttribute(
+		'href',
+		/repository-url=https%3A%2F%2Fgithub.com%2Falex%2Fportfolio/,
+	)
+	await context.route(
+		'https://github.com/montymi/next-template/fork',
+		(route) => route.fulfill({ body: 'GitHub fork handoff' }),
+	)
+	const downloadEvent = page.waitForEvent('download')
+	const popupEvent = page.waitForEvent('popup')
+	await page.getByRole('link', { name: 'Save & fork on GitHub ↗' }).click()
+	const popup = await popupEvent
+	await expect(popup).toHaveURL('https://github.com/montymi/next-template/fork')
+	await popup.close()
+	const download = await downloadEvent
+	expect(download.suggestedFilename()).toBe('coast-starter.zip')
+	const files = unzipSync(
+		new Uint8Array(await readFile((await download.path())!)),
+	)
+	expect(JSON.parse(strFromU8(files['src/config/site.json'])).name).toBe(
+		'Alex Rivera',
+	)
+	expect(strFromU8(files['PERSONALIZE.md'])).toContain(
+		'Built accessible websites.',
+	)
+	const root = await mkdtemp(path.join(tmpdir(), 'coast-import-'))
+	try {
+		await applyKit((await download.path())!, root)
+		expect(
+			JSON.parse(
+				await readFile(path.join(root, 'src/config/brand.json'), 'utf8'),
+			),
+		).toEqual({ logo: '/brand/logo.png', avatar: '/brand/avatar.png' })
+		expect(
+			(await readFile(path.join(root, 'public/brand/logo.png')))
+				.subarray(0, 8)
+				.toString('hex'),
+		).toBe('89504e470d0a1a0a')
+		const { execFileSync } = await import('node:child_process')
+		execFileSync(
+			process.execPath,
+			[path.resolve('scripts/generate-icons.mjs')],
+			{
+				cwd: root,
+				env: { ...process.env, XDG_CACHE_HOME: '/tmp/coast-font-cache' },
+				stdio: 'pipe',
+			},
+		)
+		expect(
+			await readFile(path.join(root, 'public/favicon.svg'), 'utf8'),
+		).toContain('data:image/png;base64,')
+		expect(
+			(await readFile(path.join(root, 'public/social-card.png'))).length,
+		).toBeGreaterThan(100)
+	} finally {
+		await rm(root, { recursive: true, force: true })
+	}
 })

@@ -2,6 +2,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
+import { readArtwork, starterKit, downloadBytes } from '@/lib/starter-kit'
+import site from '@/config/site.json'
+import brandSource from '@/config/brand.json'
+import { publishBrand } from '@/components/site/brand-preview'
 import source from '@/design-system/tokens.json'
 import { generateTokenCss, validateTokens } from '@/design-system/format.mjs'
 import { publishPreview } from '@/design-system/preview'
@@ -90,6 +94,43 @@ export default function Configurator() {
 	)
 	const [status, setStatus] = useState('')
 	const [saving, setSaving] = useState(false)
+	const [brand, setBrand] = useState({ ...brandSource, name: site.name })
+	const [resume, setResume] = useState('')
+	const [repo, setRepo] = useState('')
+	const isDev = process.env.NODE_ENV === 'development'
+	useEffect(() => publishBrand(brand), [brand])
+	async function upload(file: File | undefined, key: 'logo' | 'avatar') {
+		if (!file) return
+		try {
+			setBrand((current) => ({ ...current, [key]: '' }))
+			const image = await readArtwork(file)
+			setBrand((current) => ({ ...current, [key]: image }))
+			setStatus('Artwork ready. Included in your starter kit.')
+		} catch (error) {
+			setStatus(
+				error instanceof Error ? error.message : 'Could not read image.',
+			)
+		}
+	}
+	async function exportKit() {
+		setSaving(true)
+		try {
+			downloadBytes(
+				await starterKit(tokens, brand, resume),
+				'coast-starter.zip',
+				'application/zip',
+			)
+			setStatus('Kit downloaded. Apply it to your fork before deploying.')
+		} catch {
+			setStatus('Could not export. Try a smaller image.')
+		} finally {
+			setSaving(false)
+		}
+	}
+	const repoMatch = /^https:\/\/github\.com\/([\w-]+)\/([\w.-]+)\/?$/.exec(repo)
+	const repoUrl = repoMatch
+		? `https://github.com/${repoMatch[1]}/${repoMatch[2]}`
+		: ''
 	const dialog = useRef<HTMLDialogElement>(null)
 	useEffect(() => {
 		publishPreview(tokens)
@@ -182,7 +223,7 @@ export default function Configurator() {
 					<circle cx='9' cy='7' r='3' fill='var(--surface)' />
 					<circle cx='15' cy='17' r='3' fill='var(--surface)' />
 				</svg>
-				Customize UI <span>DEV</span>
+				Customize UI <span>{isDev ? 'DEV' : 'MAKE YOURS'}</span>
 			</button>
 			<dialog
 				ref={dialog}
@@ -191,7 +232,9 @@ export default function Configurator() {
 			>
 				<header>
 					<div>
-						<p className='eyebrow'>DEVELOPMENT ONLY</p>
+						<p className='eyebrow'>
+							{isDev ? 'LOCAL EDITOR' : 'YOUR SITE STARTS HERE'}
+						</p>
 						<h2 id='config-title'>Make it yours.</h2>
 					</div>
 					<button
@@ -205,8 +248,9 @@ export default function Configurator() {
 				</header>
 				<div className='config-body'>
 					<p className='config-intro'>
-						Changes preview instantly. Save to update this project, or export
-						your token file.
+						Preview your design, download your starter kit, then fork the
+						repository. Apply the kit to your fork before deploying. Your
+						artwork and resume stay in this browser until you download them.
 					</p>
 					<div className='config-tabs' aria-label='Color mode'>
 						<button
@@ -224,6 +268,116 @@ export default function Configurator() {
 							Dark
 						</button>
 					</div>
+					<fieldset>
+						<legend>Identity & artwork</legend>
+						<label className='config-label'>
+							Site name
+							<input
+								className='input'
+								maxLength={80}
+								value={brand.name}
+								onChange={(e) =>
+									setBrand((current) => ({ ...current, name: e.target.value }))
+								}
+							/>
+						</label>
+						{(['logo', 'avatar'] as const).map((key) => (
+							<label className='config-label' key={key}>
+								{key === 'logo' ? 'Logo image' : 'Avatar image'}
+								<input
+									type='file'
+									accept='image/png,image/jpeg,image/webp'
+									onChange={(e) => void upload(e.target.files?.[0], key)}
+								/>
+								<button
+									className='text-link'
+									type='button'
+									onClick={() =>
+										setBrand((current) => ({ ...current, [key]: '' }))
+									}
+								>
+									Remove {key}
+								</button>
+							</label>
+						))}
+						<p className='form-hint'>
+							PNG, JPEG, WebP · up to 2 MB. Logo generates the favicon, Apple
+							icon, PWA icons, and share image when you apply your kit.
+						</p>
+					</fieldset>
+					<fieldset>
+						<legend>Resume → agent brief</legend>
+						<label className='config-label'>
+							Resume text
+							<textarea
+								className='input'
+								rows={4}
+								maxLength={30000}
+								value={resume}
+								onChange={(e) => setResume(e.target.value)}
+							/>
+						</label>
+						<label className='config-label'>
+							Import resume (.txt or .md)
+							<input
+								type='file'
+								accept='.txt,.md,text/plain,text/markdown'
+								onChange={async (e) => {
+									const file = e.target.files?.[0]
+									if (!file) return
+									if (file.size > 60000) {
+										setStatus('Use a text resume under 60 KB.')
+										return
+									}
+									setResume((await file.text()).slice(0, 30000))
+									setStatus('Resume imported locally.')
+								}}
+							/>
+						</label>
+						<p className='form-hint'>
+							Optional. Your kit includes PERSONALIZE.md for Codex or another
+							coding agent. No resume is uploaded or sent to an AI service.
+						</p>
+					</fieldset>
+					<fieldset>
+						<legend>Fork → personalize → deploy</legend>
+						<ol className='config-steps'>
+							<li>Save your kit and fork on GitHub.</li>
+							<li>
+								In your fork: npm ci, then npm run customize --
+								/path/to/coast-starter.zip.
+							</li>
+							<li>Review, commit, and push. Import your fork into Vercel.</li>
+						</ol>
+						<label className='config-label'>
+							Your fork URL
+							<input
+								className='input'
+								type='url'
+								placeholder='https://github.com/you/your-site'
+								value={repo}
+								onChange={(e) => setRepo(e.target.value)}
+							/>
+						</label>
+						{repoUrl && (
+							<div className='config-links'>
+								<a
+									href={`https://codespaces.new/${repoMatch![1]}/${repoMatch![2]}`}
+									target='_blank'
+									rel='noopener noreferrer'
+								>
+									Open fork in Codespaces ↗
+								</a>
+								<a
+									href={`https://vercel.com/new/git/external?repository-url=${encodeURIComponent(repoUrl)}`}
+									target='_blank'
+									rel='noopener noreferrer'
+								>
+									Deploy your fork on Vercel ↗
+								</a>
+							</div>
+						)}
+					</fieldset>
 					<fieldset>
 						<legend>Colors</legend>
 						<div className='config-colors'>
@@ -311,8 +465,26 @@ export default function Configurator() {
 					</fieldset>
 				</div>
 				<div className='config-actions'>
-					<Button disabled={saving} onClick={() => void save()}>
-						{saving ? 'Saving…' : 'Save to project'}
+					<a
+						className='button button--primary'
+						href={`${site.repository}/fork`}
+						target='_blank'
+						rel='noopener noreferrer'
+						onClick={() => void exportKit()}
+					>
+						Save & fork on GitHub ↗
+					</a>
+					{isDev && (
+						<Button disabled={saving} onClick={() => void save()}>
+							Save tokens locally
+						</Button>
+					)}
+					<Button
+						disabled={saving}
+						variant='secondary'
+						onClick={() => void exportKit()}
+					>
+						Download starter kit
 					</Button>
 					<Button variant='secondary' onClick={download}>
 						Download JSON

@@ -1190,3 +1190,32 @@ dialog::backdrop {
 	min-height: 32px;
 	margin-top: 10px;
 }
+.brand-upload {
+	width: 34px;
+	height: 34px;
+	object-fit: contain;
+}
+.brand-avatar {
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+.config-steps {
+	padding-left: 18px;
+	font-size: 12px;
+	color: var(--muted);
+}
+.config-steps li {
+	margin-bottom: 10px;
+}
+.config-links {
+	display: grid;
+	gap: 12px;
+	font-size: 12px;
+	color: var(--primary);
+}
+.config-label input[type='file'] {
+	width: 100%;
+	font-size: 11px;
+}
